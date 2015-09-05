@@ -1,8 +1,9 @@
-package calculator.tokenizing;
+package calculator.tokenizing.src;
 
 /**
  * Created by Andrés on 05/09/2015.
  * Clase encargada de manejar Tokens que sean funciones.
+ * @see calculator.tokenizing.src.Token
  */
 public class FunctionToken extends Token {
 

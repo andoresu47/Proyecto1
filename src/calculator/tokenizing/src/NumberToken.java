@@ -1,8 +1,9 @@
-package calculator.tokenizing;
+package calculator.tokenizing.src;
 
 /**
  * Created by Andrés on 05/09/2015.
  * Clase encargada de manejar Tokens que sean números.
+ * @see calculator.tokenizing.src.Token
  */
 public class NumberToken extends Token {
 
@@ -17,5 +18,13 @@ public class NumberToken extends Token {
     public NumberToken(double value) {
         this.value = value;
         type = NUMBER;
+    }
+
+    /**
+     * Método que devuelve el valor del token.
+     * @return double - valor del token.
+     */
+    public double getValue() {
+        return value;
     }
 }
