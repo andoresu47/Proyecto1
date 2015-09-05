@@ -21,15 +21,4 @@ public class VariableToken extends Token {
                 type = UNKNOWN_TOKEN;
         }
     }
-
-    /**
-     * Método que regresa el tipo del Token.
-     *
-     * @return int - entero correspondiente al
-     * tipo del Token.
-     */
-    @Override
-    public int getType() {
-        return type;
-    }
 }

@@ -33,6 +33,8 @@ public abstract class Token {
      * @return int - entero correspondiente al
      * tipo del Token.
      */
-    public abstract int getType();
+    public int getType(){
+        return type;
+    }
 
 }

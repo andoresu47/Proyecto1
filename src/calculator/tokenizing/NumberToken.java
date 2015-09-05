@@ -18,17 +18,4 @@ public class NumberToken extends Token {
         this.value = value;
         type = NUMBER;
     }
-
-    /**
-     * Método que regresa el tipo del Token.
-     *
-     * @return int - entero correspondiente al
-     * tipo del Token.
-     */
-    @Override
-    public int getType() {
-        return type;
-    }
-
-
 }
