@@ -45,9 +45,9 @@ public class NumberTokenTest {
 
         double testDouble = random.nextDouble();
 
-        NumberToken number = new NumberToken(testDouble);
+        Token number = new NumberToken(testDouble);
 
-        double value = number.getValue();
+        double value = (double)number.getValue();
 
         assertEquals(value, testDouble, 0.001);
     }

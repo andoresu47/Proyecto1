@@ -7,6 +7,8 @@ package calculator.tokenizing.src;
  */
 public class OperatorToken extends Token {
 
+    private char value;
+
     /**
      * Constructor que recibe un caracter y representa
      * el tipo del Token.
@@ -14,6 +16,8 @@ public class OperatorToken extends Token {
      *                 uno de los operadores definidos.
      */
     public OperatorToken(char operator) {
+        value = operator;
+
         switch (operator) {
             case '+':
                 type = PLUS;
@@ -39,5 +43,15 @@ public class OperatorToken extends Token {
             default:
                 type = UNKNOWN_TOKEN;
         }
+    }
+
+    /**
+     * Método que regresa el valor del token.
+     *
+     * @return Character - valor del token.
+     */
+    @Override
+    public Character getValue() {
+        return value;
     }
 }

@@ -43,4 +43,19 @@ public class VariableTokenTest {
             assertEquals(-1, type);
         }
     }
+
+    /**
+     * Método para probar el método "getValue"
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetValue() throws Exception {
+        char test = 'x';
+
+        Token variable = new VariableToken(test);
+
+        char returnValue = (char)variable.getValue();
+
+        assertEquals(test, returnValue);
+    }
 }

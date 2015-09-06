@@ -6,6 +6,8 @@ package calculator.tokenizing.src;
  */
 public class VariableToken extends Token {
 
+    private char value;
+
     /**
      * Constructor que recibe un caracter y representa el
      * tipo del Token.
@@ -13,6 +15,8 @@ public class VariableToken extends Token {
      *                 a la variable definida.
      */
     public VariableToken(char variable) {
+        value = variable;
+
         switch (variable){
             case 'x':
                 type = VARIABLE;
@@ -20,5 +24,15 @@ public class VariableToken extends Token {
             default:
                 type = UNKNOWN_TOKEN;
         }
+    }
+
+    /**
+     * Método que regresa el valor del token.
+     *
+     * @return Character - valor del token.
+     */
+    @Override
+    public Character getValue() {
+        return value;
     }
 }

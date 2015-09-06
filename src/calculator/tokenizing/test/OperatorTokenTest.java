@@ -43,4 +43,19 @@ public class OperatorTokenTest {
             assertEquals(-1, type);
         }
     }
+
+    /**
+     * Método de prueba para el método "getValue".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetValue() throws Exception {
+        char test = '+';
+
+        Token operator = new OperatorToken(test);
+
+        char returnValue = (char)operator.getValue();
+
+        assertEquals(test, returnValue);
+    }
 }

@@ -42,4 +42,19 @@ public class FunctionTokenTest {
             assertEquals(-1, type);
         }
     }
+
+    /**
+     * Método que prueba el método "getValue".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetValue() throws Exception {
+        String test = "sin";
+
+        Token function = new FunctionToken(test);
+
+        String returnValue = (String)function.getValue();
+
+        assertEquals(test, returnValue);
+    }
 }

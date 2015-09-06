@@ -21,10 +21,10 @@ public class NumberToken extends Token {
     }
 
     /**
-     * Método que devuelve el valor del token.
-     * @return double - valor del token.
+     * Método que regresa el valor del token.
+     * @return Double - valor del token.
      */
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 }

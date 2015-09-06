@@ -7,6 +7,8 @@ package calculator.tokenizing.src;
  */
 public class FunctionToken extends Token {
 
+    private String value;
+
     /**
      * Constructor que recibe una cadena y representa
      * el tipo del Token.
@@ -14,6 +16,8 @@ public class FunctionToken extends Token {
      *                 una de las funciones definidas.
      */
     public FunctionToken(String function) {
+        value = function;
+
         switch (function) {
             case "sin":
                 type = SIN;
@@ -39,5 +43,15 @@ public class FunctionToken extends Token {
             default:
                 type = UNKNOWN_TOKEN;
         }
+    }
+
+    /**
+     * Método que devuelve el valor del token.
+     *
+     * @return String - valor del token.
+     */
+    @Override
+    public String getValue() {
+        return value;
     }
 }

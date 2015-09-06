@@ -37,4 +37,10 @@ public abstract class Token {
         return type;
     }
 
+    /**
+     * Método que regresa el valor del token.
+     *
+     * @return Object - valor del token.
+     */
+    public abstract Object getValue();
 }
