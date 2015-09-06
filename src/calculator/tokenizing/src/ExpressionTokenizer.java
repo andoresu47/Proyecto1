@@ -13,14 +13,21 @@ public class ExpressionTokenizer {
     private LinkedList<Token> tokensList;
 
     /**
-     * 
+     * Constructor que recibe la cadena a desmembrar en
+     * tokens.
+     * @param expression - expresión que se descompondrá
+     *                   en tokens.
      */
-    public ExpressionTokenizer() {
+    public ExpressionTokenizer(String expression) {
+
     }
 
     /**
-     *
-     * @return LinkedList<Token>
+     * Método que devuelve la lista de tokens que se creó
+     * a partir de la expresión con la que se construyó
+     * el objeto.
+     * @return LinkedList<Token> - lista de tokens con
+     * la descomposición de una cadena.
      */
     public LinkedList<Token> getTokensList() {
         return tokensList;
