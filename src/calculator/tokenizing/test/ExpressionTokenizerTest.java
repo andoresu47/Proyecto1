@@ -16,6 +16,10 @@ public class ExpressionTokenizerTest {
 
     /**
      * Método que prueba "getTokenList".
+     * Se verifica que la lista de Tokens esté en el orden
+     * correcto; es decir, como la cadena fue introducida por
+     * el usuario. Así mismo, que solo se tomen en cuenta caracteres
+     * permitidos por la gramática.
      * @throws Exception si ocurre alguna anomalía.
      */
     @Test
