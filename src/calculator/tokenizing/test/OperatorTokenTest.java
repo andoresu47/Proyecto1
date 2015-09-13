@@ -35,6 +35,7 @@ public class OperatorTokenTest {
 
         //El valor de "type" estará en el conjunto {-1,2,3,4,5,6,7,8}
         int type = operator.getType();
+        System.out.println(current);
 
         if(type > 0){
             //Se le suma un 2 por la declaración de constantes en la clase "Token"

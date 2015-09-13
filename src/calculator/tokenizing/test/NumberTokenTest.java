@@ -49,6 +49,8 @@ public class NumberTokenTest {
 
         double value = (double)number.getValue();
 
+        System.out.println(value);
+
         assertEquals(value, testDouble, 0.001);
     }
 

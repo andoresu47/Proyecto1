@@ -34,6 +34,7 @@ public class FunctionTokenTest {
 
         //El valor de "type" estará en el conjunto {-1,9,10,11,12,13,14,15}
         int type = function.getType();
+        System.out.println(current);
 
         if(type > 0){
             //Se le suma un 2 por la declaración de constantes en la clase "Token"

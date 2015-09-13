@@ -36,6 +36,7 @@ public class VariableTokenTest {
 
         //El valor de "type" estará en el conjunto {-1,1}
         int type = variable.getType();
+        System.out.println(current);
 
         if(type > 0){
             assertEquals(key + 1, type);
