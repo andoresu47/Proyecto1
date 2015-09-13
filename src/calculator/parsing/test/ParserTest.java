@@ -2,11 +2,8 @@ package calculator.parsing.test;
 
 import calculator.parsing.src.Parser;
 import calculator.tokenizing.src.ExpressionTokenizer;
-import calculator.tokenizing.src.NumberToken;
-import calculator.tokenizing.src.Token;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -24,7 +21,7 @@ public class ParserTest {
      */
     @Test
     public void testIsValid() throws Exception {
-        String clean = "sin(x + 4.56)",
+        String clean = "sin(x ^ 4.56)",
                 dirty = "sinx + 4.56)(";
 
         ExpressionTokenizer expTokenizer;
@@ -36,12 +33,14 @@ public class ParserTest {
         if(bound == 0){
             expTokenizer = new ExpressionTokenizer(clean);
             parser = new Parser(expTokenizer.getTokensList());
+            System.out.println("Datos limpios");
 
             assertTrue(parser.isValid());
 
         }else{
             expTokenizer = new ExpressionTokenizer(dirty);
             parser = new Parser(expTokenizer.getTokensList());
+            System.out.println("Datos sucios");
 
             assertFalse(parser.isValid());
         }

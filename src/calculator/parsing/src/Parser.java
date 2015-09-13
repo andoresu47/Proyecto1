@@ -1,5 +1,6 @@
 package calculator.parsing.src;
 
+import calculator.tokenizing.src.FunctionToken;
 import calculator.tokenizing.src.Token;
 
 import java.util.LinkedList;
@@ -27,8 +28,8 @@ public class Parser {
      * contiene la sintaxis correcta de gramática infija.
      * @return boolean - true si la sitaxis es correcta, false en otro caso.
      */
-    public boolean isValid(){
-        return false;
+    public boolean isValid() {
+        return tokensList != null && parseExpression(tokensList);
     }
 
     /**
@@ -38,7 +39,12 @@ public class Parser {
      * @return boolean - true si la forma es correcta, false en caso contrario.
      */
     private static boolean parseExpression(LinkedList<Token> tokensList){
-        return false;
+        return parseNumber(tokensList)
+                || parseVariable(tokensList)
+                || parseParenthesisExpression(tokensList)
+                || parseMinusExpression(tokensList)
+                || parseFunctionExpression(tokensList)
+                || parseExpressionOperatorExpression(tokensList);
     }
 
     /**
@@ -48,7 +54,7 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseNumber(LinkedList<Token> tokensList){
-        return false;
+        return tokensList.size() == 1 && tokensList.getFirst().getType() == Token.NUMBER;
     }
 
     /**
@@ -58,7 +64,7 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseVariable(LinkedList<Token> tokensList){
-        return false;
+        return tokensList.size() == 1 && tokensList.getFirst().getType() == Token.VARIABLE;
     }
 
     /**
@@ -68,7 +74,15 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseParenthesisExpression(LinkedList<Token> tokensList){
-        return false;
+        if(tokensList.size() < 3){
+            return false;
+        }
+
+        LinkedList<Token> newTokensList = new LinkedList<>(tokensList);
+        boolean isLeftParenthesis = newTokensList.removeFirst().getType() == Token.LEFT_PARENTHESIS;
+        boolean isRightParenthesis = newTokensList.removeLast().getType() == Token.RIGHT_PARENTHESIS;
+
+        return isLeftParenthesis && parseExpression(newTokensList) && isRightParenthesis;
     }
 
     /**
@@ -78,7 +92,14 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseMinusExpression(LinkedList<Token> tokensList){
-        return false;
+        if(tokensList.size() < 2){
+            return false;
+        }
+
+        LinkedList<Token> newTokensList = new LinkedList<>(tokensList);
+        boolean isMinusSign = newTokensList.removeFirst().getType() == Token.MINUS;
+
+        return isMinusSign && parseExpression(newTokensList);
     }
 
     /**
@@ -88,7 +109,16 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseFunctionExpression(LinkedList<Token> tokensList){
-        return false;
+        if(tokensList.size() < 6){
+            return false;
+        }
+
+        LinkedList<Token> newTokensList = new LinkedList<>(tokensList);
+        boolean isFunction = newTokensList.removeFirst() instanceof FunctionToken;
+        boolean isLeftParenthesis = newTokensList.removeFirst().getType() == Token.LEFT_PARENTHESIS;
+        boolean isRightParenthesis = newTokensList.removeLast().getType() == Token.RIGHT_PARENTHESIS;
+
+        return isFunction && isLeftParenthesis && parseExpression(newTokensList) && isRightParenthesis;
     }
 
     /**
@@ -98,6 +128,30 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseExpressionOperatorExpression(LinkedList<Token> tokensList){
+        if(tokensList.size() < 3){
+            return false;
+        }
+
+        //Se inicializa en i = 1, y va hasta el tamaño menos uno, pues un operador
+        //no puede estar ni al principio ni al final de una expresión.
+        for(int i = 1; i < tokensList.size() - 1; i++){
+
+            int type = tokensList.get(i).getType();
+
+            boolean isOperator = type == Token.PLUS ||
+                                 type == Token.MINUS ||
+                                 type == Token.PRODUCT ||
+                                 type == Token.DIVISION ||
+                                 type == Token.EXP;
+
+            if(isOperator){
+                LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
+                LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
+
+                return parseExpression(leftExpression) && parseExpression(rightExpression);
+            }
+        }
+
         return false;
     }
 }
