@@ -51,4 +51,17 @@ public class NumberTokenTest {
 
         assertEquals(value, testDouble, 0.001);
     }
+
+    /**
+     * Método de prueba para los métodos "equals" y "hashCode".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testEquals_Symmetric() throws Exception {
+        NumberToken number1 = new NumberToken(4.56);
+        NumberToken number2 = new NumberToken(4.56);
+
+        assertTrue(number1.equals(number2) && number2.equals(number1));
+        assertTrue(number1.hashCode() == number2.hashCode());
+    }
 }

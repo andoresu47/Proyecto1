@@ -56,7 +56,6 @@ public class ExpressionTokenizer {
                                     function.equals("cot") || function.equals("sec") || function.equals("csc") ||
                                     function.equals("sqr")){
                                 tokensList.addLast(new FunctionToken(function));
-                                i++;
                             }else{
                                 tokensList = null;    //Al no ser válida la entrada, no se tendrán tokens.
                                 break;
@@ -78,7 +77,6 @@ public class ExpressionTokenizer {
                                 if(isParsable(numberStr)){
                                     double number = Double.parseDouble(numberStr);
                                     tokensList.addLast(new NumberToken(number));
-                                    i++;
                                 }else{
                                     tokensList = null;
                                     break;

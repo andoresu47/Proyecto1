@@ -58,4 +58,17 @@ public class OperatorTokenTest {
 
         assertEquals(test, returnValue);
     }
+
+    /**
+     * Método de prueba para los métodos "equals" y "hashCode".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testEquals_Symmetric() throws Exception {
+        OperatorToken operator1 = new OperatorToken('+');
+        OperatorToken operator2 = new OperatorToken('+');
+
+        assertTrue(operator1.equals(operator2) && operator2.equals(operator1));
+        assertTrue(operator1.hashCode() == operator2.hashCode());
+    }
 }

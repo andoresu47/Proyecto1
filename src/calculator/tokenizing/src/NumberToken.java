@@ -27,4 +27,26 @@ public class NumberToken extends Token {
     public Double getValue() {
         return value;
     }
+
+    /**
+     * Método que determina si dos tokens son iguales.
+     *
+     * @return boolean - true si son iguales, false en caso contrario.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NumberToken that = (NumberToken) o;
+
+        return Double.compare(that.value, value) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        long temp = Double.doubleToLongBits(value);
+        return (int) (temp ^ (temp >>> 32));
+    }
 }

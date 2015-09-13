@@ -57,4 +57,17 @@ public class FunctionTokenTest {
 
         assertEquals(test, returnValue);
     }
+
+    /**
+     * Método de prueba para los métodos "equals" y "hashCode".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testEquals_Symmetric() throws Exception {
+        FunctionToken function1 = new FunctionToken("sin");
+        FunctionToken function2 = new FunctionToken("sin");
+
+        assertTrue(function1.equals(function2) && function2.equals(function1));
+        assertTrue(function1.hashCode() == function2.hashCode());
+    }
 }

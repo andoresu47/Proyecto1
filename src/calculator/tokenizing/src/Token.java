@@ -43,4 +43,12 @@ public abstract class Token {
      * @return Object - valor del token.
      */
     public abstract Object getValue();
+
+    /**
+     * Método que determina si dos tokens son iguales.
+     *
+     * @return boolean - true si son iguales, false en caso contrario.
+     */
+    @Override
+    public abstract boolean equals(Object input);
 }

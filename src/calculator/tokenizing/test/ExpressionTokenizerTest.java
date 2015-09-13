@@ -26,13 +26,16 @@ public class ExpressionTokenizerTest {
     public void testGetTokensList() throws Exception {
         ExpressionTokenizer expTokenizer;
 
-        String clean = "x+2",
-               dirty = "test";
+        String clean = "sin(x + 4.56)",
+               dirty = "sn(x + 4.5.8.)";
 
         LinkedList<Token> cleanList = new LinkedList<>();
+        cleanList.addLast(new FunctionToken("sin"));
+        cleanList.addLast(new OperatorToken('('));
         cleanList.addLast(new VariableToken('x'));
         cleanList.addLast(new OperatorToken('+'));
-        cleanList.addLast(new NumberToken(2));
+        cleanList.addLast(new NumberToken(4.56));
+        cleanList.addLast(new OperatorToken(')'));
 
         Random random = new Random();
         int bound = random.nextInt(2);
@@ -40,12 +43,14 @@ public class ExpressionTokenizerTest {
         if(bound == 0){                 //Prueba con datos limpios
             expTokenizer = new ExpressionTokenizer(clean);
             LinkedList<Token> testing = expTokenizer.getTokensList();
+            System.out.println("Datos limpios");
 
             assertEquals(cleanList, testing);
         }else{                          //Prueba con datos sucios
             expTokenizer = new ExpressionTokenizer(dirty);
             LinkedList<Token> testing = expTokenizer.getTokensList();
 
+            System.out.println("Datos sucios.");
             assertEquals(null, testing);
         }
     }

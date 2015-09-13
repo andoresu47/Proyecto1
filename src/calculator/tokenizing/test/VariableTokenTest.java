@@ -58,4 +58,17 @@ public class VariableTokenTest {
 
         assertEquals(test, returnValue);
     }
+
+    /**
+     * Método de prueba para los métodos "equals" y "hashCode".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testEquals_Symmetric() throws Exception {
+        VariableToken variable1 = new VariableToken('x');
+        VariableToken variable2 = new VariableToken('x');
+
+        assertTrue(variable1.equals(variable2) && variable2.equals(variable1));
+        assertTrue(variable1.hashCode() == variable2.hashCode());
+    }
 }

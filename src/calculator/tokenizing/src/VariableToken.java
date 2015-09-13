@@ -35,4 +35,25 @@ public class VariableToken extends Token {
     public Character getValue() {
         return value;
     }
+
+    /**
+     * Método que determina si dos tokens son iguales.
+     *
+     * @return boolean - true si son iguales, false en caso contrario.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VariableToken that = (VariableToken) o;
+
+        return value == that.value;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) value;
+    }
 }
