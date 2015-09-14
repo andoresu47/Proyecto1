@@ -26,17 +26,28 @@ public class ExpressionTokenizerTest {
     public void testGetTokensList() throws Exception {
         ExpressionTokenizer expTokenizer;
 
-        String clean = "sinx + 4.56)(",
+        String clean = "3 + sqr(4 * 2) / (1 - 5) ^ 2 ^ 3",
                dirty = "sn(x + 4.5.8.)";
 
         LinkedList<Token> cleanList = new LinkedList<>();
-        cleanList.addLast(new FunctionToken("sin"));
-        //cleanList.addLast(new OperatorToken('('));
-        cleanList.addLast(new VariableToken('x'));
+        cleanList.addLast(new NumberToken(3));
         cleanList.addLast(new OperatorToken('+'));
-        cleanList.addLast(new NumberToken(4.56));
-        cleanList.addLast(new OperatorToken(')'));
+        cleanList.addLast(new FunctionToken("sqr"));
         cleanList.addLast(new OperatorToken('('));
+        cleanList.addLast(new NumberToken(4));
+        cleanList.addLast(new OperatorToken('*'));
+        cleanList.addLast(new NumberToken(2));
+        cleanList.addLast(new OperatorToken(')'));
+        cleanList.addLast(new OperatorToken('/'));
+        cleanList.addLast(new OperatorToken('('));
+        cleanList.addLast(new NumberToken(1));
+        cleanList.addLast(new OperatorToken('-'));
+        cleanList.addLast(new NumberToken(5));
+        cleanList.addLast(new OperatorToken(')'));
+        cleanList.addLast(new OperatorToken('^'));
+        cleanList.addLast(new NumberToken(2));
+        cleanList.addLast(new OperatorToken('^'));
+        cleanList.addLast(new NumberToken(3));
 
         Random random = new Random();
         int bound = random.nextInt(2);

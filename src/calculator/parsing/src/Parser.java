@@ -44,7 +44,11 @@ public class Parser {
                 || parseParenthesisExpression(tokensList)
                 || parseMinusExpression(tokensList)
                 || parseFunctionExpression(tokensList)
-                || parseExpressionOperatorExpression(tokensList);
+                || parseExpressionSumExpression(tokensList)
+                || parseExpressionMinusExpression(tokensList)
+                || parseExpressionProductExpression(tokensList)
+                || parseExpressionDivisionExpression(tokensList)
+                || parseExpressionExponentialExpression(tokensList);
     }
 
     /**
@@ -123,28 +127,134 @@ public class Parser {
 
     /**
      * Método que se encarga de verificar que la sintaxis de una lista de tokens
-     * siga la forma de "<expresión> <operador> <expresión>" en la gramática.
+     * siga la forma de "<expresión> <+> <expresión>" en la gramática.
      * @param tokensList - lista de tokens en notación infija.
      * @return true - si la forma es correcta, false en caso contrario.
      */
-    private static boolean parseExpressionOperatorExpression(LinkedList<Token> tokensList){
-        if(tokensList.size() < 3){
+    private static boolean parseExpressionSumExpression(LinkedList<Token> tokensList) {
+        if (tokensList.size() < 3) {
             return false;
         }
 
         //Se inicializa en i = 1, y va hasta el tamaño menos uno, pues un operador
         //no puede estar ni al principio ni al final de una expresión.
+        for (int i = 1; i < tokensList.size() - 1; i++) {
+
+            int type = tokensList.get(i).getType();
+
+            boolean isSum = (type == Token.PLUS);
+
+            if (isSum) {
+                LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
+                LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
+
+                return parseExpression(leftExpression) && parseExpression(rightExpression);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Método que se encarga de verificar que la sintaxis de una lista de tokens
+     * siga la forma de "<expresión> <-> <expresión>" en la gramática.
+     * @param tokensList - lista de tokens en notación infija.
+     * @return true - si la forma es correcta, false en caso contrario.
+     */
+    private static boolean parseExpressionMinusExpression(LinkedList<Token> tokensList) {
+        if (tokensList.size() < 3) {
+            return false;
+        }
+
+        for (int i = 1; i < tokensList.size() - 1; i++) {
+
+            int type = tokensList.get(i).getType();
+
+            boolean isDifference = (type == Token.MINUS);
+
+            if (isDifference) {
+                LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
+                LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
+
+                return parseExpression(leftExpression) && parseExpression(rightExpression);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Método que se encarga de verificar que la sintaxis de una lista de tokens
+     * siga la forma de "<expresión> <*> <expresión>" en la gramática.
+     * @param tokensList - lista de tokens en notación infija.
+     * @return true - si la forma es correcta, false en caso contrario.
+     */
+    private static boolean parseExpressionProductExpression(LinkedList<Token> tokensList){
+        if(tokensList.size() < 3){
+            return false;
+        }
+
         for(int i = 1; i < tokensList.size() - 1; i++){
 
             int type = tokensList.get(i).getType();
 
-            boolean isOperator = type == Token.PLUS ||
-                                 type == Token.MINUS ||
-                                 type == Token.PRODUCT ||
-                                 type == Token.DIVISION ||
-                                 type == Token.EXP;
+            boolean isProduct = type == Token.PRODUCT;
 
-            if(isOperator){
+            if(isProduct){
+                LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
+                LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
+
+                return parseExpression(leftExpression) && parseExpression(rightExpression);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Método que se encarga de verificar que la sintaxis de una lista de tokens
+     * siga la forma de "<expresión> </> <expresión>" en la gramática.
+     * @param tokensList - lista de tokens en notación infija.
+     * @return true - si la forma es correcta, false en caso contrario.
+     */
+    private static boolean parseExpressionDivisionExpression(LinkedList<Token> tokensList){
+        if(tokensList.size() < 3){
+            return false;
+        }
+
+        for(int i = 1; i < tokensList.size() - 1; i++){
+
+            int type = tokensList.get(i).getType();
+
+            boolean isDivision = type == Token.DIVISION;
+
+            if(isDivision){
+                LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
+                LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
+
+                return parseExpression(leftExpression) && parseExpression(rightExpression);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Método que se encarga de verificar que la sintaxis de una lista de tokens
+     * siga la forma de "<expresión> <^> <expresión>" en la gramática.
+     * @param tokensList - lista de tokens en notación infija.
+     * @return true - si la forma es correcta, false en caso contrario.
+     */
+    private static boolean parseExpressionExponentialExpression(LinkedList<Token> tokensList){
+        if(tokensList.size() < 3){
+            return false;
+        }
+
+        for(int i = 1; i < tokensList.size() - 1; i++){
+
+            int type = tokensList.get(i).getType();
+
+            boolean isExponential = type == Token.EXP;
+
+            if(isExponential){
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 

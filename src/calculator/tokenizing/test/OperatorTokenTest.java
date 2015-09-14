@@ -61,6 +61,36 @@ public class OperatorTokenTest {
     }
 
     /**
+     * Método de prueba para el método "getAssociativity".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetAssociativity() throws Exception {
+        char test = '+';
+
+        OperatorToken operator = new OperatorToken(test);
+
+        char associativity = operator.getAssociativity();
+
+        assertEquals(associativity, 'l');
+    }
+
+    /**
+     * Método de prueba para el método "getAssociativity".
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetPrecedence() throws Exception {
+        char test = '+';
+
+        OperatorToken operator = new OperatorToken(test);
+
+        int precedence = operator.getPrecedence();
+
+        assertEquals(precedence, 2);
+    }
+
+    /**
      * Método de prueba para los métodos "equals" y "hashCode".
      * @throws Exception si ocurre alguna anomalía.
      */

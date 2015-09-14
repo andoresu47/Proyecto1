@@ -17,8 +17,8 @@ public class EvaluateTest {
 
     @Test
     public void testInfixToPostfix() throws Exception {
-        String infixTokens = "sin(x + 4.56)",
-               postfixTokens = "x 4.56 + sin";
+        String infixTokens = "3 + sqr(4 * 2) / (1 - 5) ^ 2 ^ 3",
+               postfixTokens = "3 4 2 * sqr 1 5 - 2 3 ^ ^ / +";
 
         ExpressionTokenizer tokenizer;
 
