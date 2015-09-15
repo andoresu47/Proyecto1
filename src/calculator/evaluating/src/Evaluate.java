@@ -14,7 +14,28 @@ import java.util.Stack;
  * convierte a posfija y las evalúa.
  */
 public class Evaluate {
+    /**
+     * Método encargado de generar una lista de coordenadas a
+     * partir de la evaluación de una expresión para cierto rango y
+     * número de puntos en el eje x.
+     * @param infixTokens - lista de tokens válida, en notación infija.
+     * @param xMin - límite izquierdo de la evaluación.
+     * @param xMax - límite derecho de la evaluación.
+     * @param numberOfPoints - número de puntos a evaluar.
+     * @return LinkedList<Coordinate> - lista de coordenadas resultante de la
+     * evaluación de la expresión.
+     */
+    public static LinkedList<Coordinate> generatePoints(LinkedList<Token> infixTokens ,double xMin, double xMax, int numberOfPoints){
+        return null;
+    }
 
+    /**
+     * Método que se encarga de convertir una lista de tokens en notación
+     * infija, a una lista de tokens en notación posfija. Esto, con el fin de
+     * poder evaluarla fácilmente.
+     * @param infixTokens - lista de tokens en notación infija.
+     * @return LinkedList<Token> - lista de tokens en notación posfija.
+     */
     public static LinkedList<Token> infixToPostfix(LinkedList<Token> infixTokens){
         Stack<Token> operatorStack = new Stack<>();
 

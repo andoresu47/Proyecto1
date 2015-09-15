@@ -1,9 +1,11 @@
 package calculator.evaluating.test;
 
 import calculator.evaluating.src.Evaluate;
+import calculator.parsing.src.Parser;
 import calculator.tokenizing.src.ExpressionTokenizer;
 import calculator.tokenizing.src.Token;
 import org.junit.Test;
+import sun.awt.image.ImageWatched;
 
 import java.util.LinkedList;
 
@@ -14,6 +16,34 @@ import static org.junit.Assert.*;
  * Clase de prueba para la clase "Evaluate".
  */
 public class EvaluateTest {
+    /**
+     * Método que prueba íntegramente el proceso de validación y
+     * evaluación de una expresión, desde que es introducida en
+     * su forma de cadena, hasta que se tiene el resultado final.
+     * @throws Exception
+     */
+    @Test
+    public void testWholeEvaluationProcess() throws Exception{
+        String valid = "20+4-7^-sin(4+(x-1))+24";
+
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer(valid);
+        LinkedList<Token> tokens = tokenizer.getTokensList();
+
+        Parser parser = new Parser(tokens);
+
+        LinkedList<Token> postfix = null;
+
+        if(parser.isValid()){
+            postfix = Evaluate.infixToPostfix(tokens);
+        }
+
+        double actualResult = Evaluate.postfixEvaluation(postfix, 2);
+        double expected = 41.5377;
+
+        assertEquals(expected, actualResult, 0.001);
+
+    }
+
     /**
      * Método que prueba "infixToPostfix".
      * Se verifica que en efecto se transforme una lista de tokens
@@ -85,8 +115,8 @@ public class EvaluateTest {
     public void testUnaryMinusConverter() throws Exception {
         //3 + sqr(x * 2) / (- (5 + 1)) ^ 2 ^ 3
         //3 + sqr(x * 2) / ((0- (5 + 1))) ^ 2 ^ 3
-        String infixTokens = "20+4-7^-sin(4+(2-1))+24",
-                convertedInfixTokens = "20+4-7^(0-sin(4+(2-1)))+24";
+        String infixTokens = "20+4-7^-sin(x+(2-1))+24",
+                convertedInfixTokens = "20+4-7^(0-sin(x+(2-1)))+24";
 
         ExpressionTokenizer tokenizer;
 
@@ -100,5 +130,14 @@ public class EvaluateTest {
         LinkedList<Token> convertedTokens = Evaluate.unaryMinusConverter(infix);
 
         assertEquals(expectedConversion, convertedTokens);
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGeneratePoints() throws Exception {
+
     }
 }
