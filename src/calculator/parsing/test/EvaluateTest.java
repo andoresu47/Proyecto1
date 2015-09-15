@@ -41,19 +41,35 @@ public class EvaluateTest {
     /**
      * Método que prueba "postfixEvaluation".
      * Se verifica que en efecto se evalúe correctamente una expresión
-     * tokenizada en notación posfija.
+     * tokenizada en notación posfija, sin errores aritméticos.
      * @throws Exception si ocurre alguna anomalía.
      */
     @Test
-    public void testPostfixEvaluation() throws Exception {
-        String infixTokens = "sin(x * 3.1416) + 2^3^2";
+    public void testCleanPostfixEvaluation() throws Exception {
+        String postfixTokens = "x 3.1416 * sin 2 3 2 ^ ^ +";
 
-        ExpressionTokenizer tokenizer = new ExpressionTokenizer(infixTokens);
-        LinkedList<Token> infix = tokenizer.getTokensList();
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer(postfixTokens);
+        LinkedList<Token> postfix = tokenizer.getTokensList();
 
-        double actual = Evaluate.postfixEvaluation(infix, 2);
-        double expected = 512;
+        double actual = Evaluate.postfixEvaluation(postfix, 2);
+        double expected = Math.sin(2 * Math.PI) + Math.pow(2, Math.pow(3, 2));
 
         assertEquals(expected, actual, 0.001);
+    }
+
+    /**
+     * Método que prueba "postfixEvaluation".
+     * Se verifica que en efecto se evalúe correctamente una expresión
+     * tokenizada en notación posfija, sin errores aritméticos.
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test(expected = ArithmeticException.class)
+    public void testDirtyPostfixEvaluation() throws Exception {
+        String postfixTokens = "0 x - sqr 2 3 2 ^ ^ +";
+
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer(postfixTokens);
+        LinkedList<Token> postfix = tokenizer.getTokensList();
+
+        double actual = Evaluate.postfixEvaluation(postfix, 2);
     }
 }
