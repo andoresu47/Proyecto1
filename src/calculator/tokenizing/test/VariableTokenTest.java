@@ -61,6 +61,23 @@ public class VariableTokenTest {
     }
 
     /**
+     * Método para probar el método "getEvaluation"
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testGetEvaluation() throws Exception {
+        char test = 'x';
+
+        VariableToken variable = new VariableToken(test);
+
+        variable.setEvaluation(4.56);
+
+        double actualValue = variable.getEvaluation();
+
+        assertEquals(4.56, actualValue, 0.0001);
+    }
+
+    /**
      * Método de prueba para los métodos "equals" y "hashCode".
      * @throws Exception si ocurre alguna anomalía.
      */

@@ -67,4 +67,17 @@ public class Evaluate {
         }
         return postfixTokens;
     }
+
+    /**
+     * Método que evalúa una expresión representada por una lista
+     * de Tokens en notación infija. Para esto, dicha lista se convierte a
+     * notación posfija y se realiza la evaluación por medio de una pila.
+     * @param infixTokens - lista de tokens en notación infija.
+     * @param currentEvaluation - valor que tomará la variable, en caso de haber.
+     * @return double - resultado de la evaluación de la expresión.
+     */
+    public static double postfixEvaluation(LinkedList<Token> infixTokens, double currentEvaluation){
+
+        return 0;
+    }
 }

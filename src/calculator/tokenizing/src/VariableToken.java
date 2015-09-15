@@ -7,6 +7,7 @@ package calculator.tokenizing.src;
 public class VariableToken extends Token {
 
     private char value;
+    private double evaluation;
 
     /**
      * Constructor que recibe un caracter y representa el
@@ -20,9 +21,11 @@ public class VariableToken extends Token {
         switch (variable){
             case 'x':
                 type = VARIABLE;
+                evaluation = 0;
                 break;
             default:
                 type = UNKNOWN_TOKEN;
+                evaluation = 0;
         }
     }
 
@@ -34,6 +37,24 @@ public class VariableToken extends Token {
     @Override
     public Character getValue() {
         return value;
+    }
+
+    /**
+     * Método que regresa la evaluación actual de la variable.
+     *
+     * @return double - evaluación actual de la variable.
+     */
+    public double getEvaluation() {
+        return evaluation;
+    }
+
+    /**
+     * Método que establece el valor explícito que tomará
+     * la variable.
+     * @param evaluation - evaluación actual de la variable.
+     */
+    public void setEvaluation(double evaluation) {
+        this.evaluation = evaluation;
     }
 
     /**
