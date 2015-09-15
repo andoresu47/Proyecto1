@@ -17,9 +17,11 @@ public class Evaluate {
 
     public static LinkedList<Token> infixToPostfix(LinkedList<Token> infixTokens){
         Stack<Token> operatorStack = new Stack<>();
+
+        LinkedList<Token> convertedInfixTokens = unaryMinusConverter(infixTokens);
         LinkedList<Token> postfixTokens = new LinkedList<>();
 
-        for (Token present : infixTokens) {
+        for (Token present : convertedInfixTokens) {
             if (present instanceof FunctionToken) {
                 operatorStack.push(present);
             }
@@ -163,5 +165,76 @@ public class Evaluate {
         double result = (Double)numbersStack.pop().getValue();
 
         return result;
+    }
+
+    public static LinkedList<Token> unaryMinusConverter(LinkedList<Token> infixTokens){
+        LinkedList<Token> convertedInfixTokens = new LinkedList<>();
+
+        for(int i = 0; i < infixTokens.size(); i++){
+            Token present = infixTokens.get(i);
+            if(present.getType() == Token.MINUS){
+                if(i == 0){
+                    if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS){
+                        int balanced = 0;
+                        convertedInfixTokens.addLast(new OperatorToken('('));
+                        convertedInfixTokens.addLast(new NumberToken(0));
+                        while(present.getType() != Token.RIGHT_PARENTHESIS || balanced != 0){
+                            if(present.getType() == Token.LEFT_PARENTHESIS){
+                                balanced++;
+                            }
+                            convertedInfixTokens.addLast(present);
+                            i++;
+                            present = infixTokens.get(i);
+                            if(present.getType() == Token.RIGHT_PARENTHESIS){
+                                balanced--;
+                            }
+                        }
+                        convertedInfixTokens.addLast(present);
+                        convertedInfixTokens.addLast(new OperatorToken(')'));
+                    }else{
+                        convertedInfixTokens.addLast(new OperatorToken('('));
+                        convertedInfixTokens.addLast(new NumberToken(0));
+                        convertedInfixTokens.addLast(present);
+                        convertedInfixTokens.addLast(infixTokens.get(i+1));
+                        convertedInfixTokens.addLast(new OperatorToken(')'));
+                        i++;
+                    }
+                }else{
+                    if(infixTokens.get(i-1) instanceof OperatorToken){
+                        if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS){
+                            int balanced = 0;
+                            convertedInfixTokens.addLast(new OperatorToken('('));
+                            convertedInfixTokens.addLast(new NumberToken(0));
+                            while(present.getType() != Token.RIGHT_PARENTHESIS || balanced != 0){
+                                if(present.getType() == Token.LEFT_PARENTHESIS){
+                                    balanced++;
+                                }
+                                convertedInfixTokens.addLast(present);
+                                i++;
+                                present = infixTokens.get(i);
+                                if(present.getType() == Token.RIGHT_PARENTHESIS){
+                                    balanced--;
+                                }
+                            }
+                            convertedInfixTokens.addLast(present);
+                            convertedInfixTokens.addLast(new OperatorToken(')'));
+                        }else{
+                            convertedInfixTokens.addLast(new OperatorToken('('));
+                            convertedInfixTokens.addLast(new NumberToken(0));
+                            convertedInfixTokens.addLast(present);
+                            convertedInfixTokens.addLast(infixTokens.get(i+1));
+                            convertedInfixTokens.addLast(new OperatorToken(')'));
+                            i++;
+                        }
+                    }else{
+                        convertedInfixTokens.addLast(present);
+                    }
+                }
+            }
+            else{
+                convertedInfixTokens.addLast(present);
+            }
+        }
+        return convertedInfixTokens;
     }
 }

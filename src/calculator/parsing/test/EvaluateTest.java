@@ -22,8 +22,8 @@ public class EvaluateTest {
      */
     @Test
     public void testInfixToPostfix() throws Exception {
-        String infixTokens = "3 + sqr(4 * 2) / (1 - 5) ^ 2 ^ 3",
-               postfixTokens = "3 4 2 * sqr 1 5 - 2 3 ^ ^ / +";
+        String infixTokens = "3 + sqr(x * 2) / (- (5 + 1)) ^ 2 ^ 3",
+               postfixTokens = "3 x 2 * sqr 0 5 1 + - 2 3 ^ ^ / +";
 
         ExpressionTokenizer tokenizer;
 
@@ -71,5 +71,29 @@ public class EvaluateTest {
         LinkedList<Token> postfix = tokenizer.getTokensList();
 
         double actual = Evaluate.postfixEvaluation(postfix, 2);
+    }
+
+    /**
+     * Método que prueba "postfixEvaluation".
+     * Se verifica que en efecto se evalúe correctamente una expresión
+     * tokenizada en notación posfija, sin errores aritméticos.
+     * @throws Exception si ocurre alguna anomalía.
+     */
+    @Test
+    public void testUnaryMinusConverter() throws Exception {
+        String infixTokens = "3 + sqr(x * 2) / (- (5 + 1)) ^ 2 ^ 3",
+                convertedInfixTokens = "3 + sqr(x * 2) / ((0- (5 + 1))) ^ 2 ^ 3";
+
+        ExpressionTokenizer tokenizer;
+
+        tokenizer = new ExpressionTokenizer(infixTokens);
+        LinkedList<Token> infix = tokenizer.getTokensList();
+
+        tokenizer = new ExpressionTokenizer(convertedInfixTokens);
+        LinkedList<Token> expectedConversion = tokenizer.getTokensList();
+
+        LinkedList<Token> convertedTokens = Evaluate.unaryMinusConverter(infix);
+
+        assertEquals(expectedConversion, convertedTokens);
     }
 }
