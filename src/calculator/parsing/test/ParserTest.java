@@ -21,7 +21,7 @@ public class ParserTest {
      */
     @Test
     public void testIsValid() throws Exception {
-        String clean = "3 + sqr(4 * 2) / (1 - 5) ^ 2 ^ 3",
+        String clean = "20+4-7^-sin(4+(2-1))+24",
                 dirty = "sinx + 4.56)(";
 
         ExpressionTokenizer expTokenizer;

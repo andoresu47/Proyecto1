@@ -136,6 +136,7 @@ public class Parser {
             return false;
         }
 
+        LinkedList<Boolean> occurrences = new LinkedList<>();
         //Se inicializa en i = 1, y va hasta el tamaño menos uno, pues un operador
         //no puede estar ni al principio ni al final de una expresión.
         for (int i = 1; i < tokensList.size() - 1; i++) {
@@ -148,7 +149,13 @@ public class Parser {
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 
-                return parseExpression(leftExpression) && parseExpression(rightExpression);
+                occurrences.addLast(parseExpression(leftExpression) && parseExpression(rightExpression));
+            }
+        }
+        //Si en alguna ocurrencia del operador se cumple el modelo, se devuelve true.
+        for (Boolean occurrence : occurrences) {
+            if (occurrence) {
+                return true;
             }
         }
         return false;
@@ -165,6 +172,8 @@ public class Parser {
             return false;
         }
 
+        LinkedList<Boolean> occurrences = new LinkedList<>();
+
         for (int i = 1; i < tokensList.size() - 1; i++) {
 
             int type = tokensList.get(i).getType();
@@ -175,7 +184,12 @@ public class Parser {
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 
-                return parseExpression(leftExpression) && parseExpression(rightExpression);
+                occurrences.addLast(parseExpression(leftExpression) && parseExpression(rightExpression));
+            }
+        }
+        for (Boolean occurrence : occurrences) {
+            if (occurrence) {
+                return true;
             }
         }
         return false;
@@ -192,6 +206,8 @@ public class Parser {
             return false;
         }
 
+        LinkedList<Boolean> occurrences = new LinkedList<>();
+
         for(int i = 1; i < tokensList.size() - 1; i++){
 
             int type = tokensList.get(i).getType();
@@ -202,10 +218,14 @@ public class Parser {
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 
-                return parseExpression(leftExpression) && parseExpression(rightExpression);
+                occurrences.addLast(parseExpression(leftExpression) && parseExpression(rightExpression));
             }
         }
-
+        for (Boolean occurrence : occurrences) {
+            if (occurrence) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -220,6 +240,8 @@ public class Parser {
             return false;
         }
 
+        LinkedList<Boolean> occurrences = new LinkedList<>();
+
         for(int i = 1; i < tokensList.size() - 1; i++){
 
             int type = tokensList.get(i).getType();
@@ -230,10 +252,14 @@ public class Parser {
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 
-                return parseExpression(leftExpression) && parseExpression(rightExpression);
+                occurrences.addLast(parseExpression(leftExpression) && parseExpression(rightExpression));
             }
         }
-
+        for (Boolean occurrence : occurrences) {
+            if (occurrence) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -248,6 +274,8 @@ public class Parser {
             return false;
         }
 
+        LinkedList<Boolean> occurrences = new LinkedList<>();
+
         for(int i = 1; i < tokensList.size() - 1; i++){
 
             int type = tokensList.get(i).getType();
@@ -258,10 +286,14 @@ public class Parser {
                 LinkedList<Token> leftExpression = new LinkedList<>(tokensList.subList(0, i));
                 LinkedList<Token> rightExpression = new LinkedList<>(tokensList.subList(i + 1, tokensList.size()));
 
-                return parseExpression(leftExpression) && parseExpression(rightExpression);
+                occurrences.addLast(parseExpression(leftExpression) && parseExpression(rightExpression));
             }
         }
-
+        for (Boolean occurrence : occurrences) {
+            if (occurrence) {
+                return true;
+            }
+        }
         return false;
     }
 }

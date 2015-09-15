@@ -1,6 +1,6 @@
-package calculator.parsing.test;
+package calculator.evaluating.test;
 
-import calculator.parsing.src.Evaluate;
+import calculator.evaluating.src.Evaluate;
 import calculator.tokenizing.src.ExpressionTokenizer;
 import calculator.tokenizing.src.Token;
 import org.junit.Test;
@@ -74,20 +74,25 @@ public class EvaluateTest {
     }
 
     /**
-     * Método que prueba "postfixEvaluation".
-     * Se verifica que en efecto se evalúe correctamente una expresión
-     * tokenizada en notación posfija, sin errores aritméticos.
+     * Método que prueba "unaryMinusConverter".
+     * Se verifica que en efecto se convierta una expresión de
+     * gramática infija, a otra dentro de la misma gramática,
+     * pero con posibilidad de tener una representación en gramática
+     * posfija.
      * @throws Exception si ocurre alguna anomalía.
      */
     @Test
     public void testUnaryMinusConverter() throws Exception {
-        String infixTokens = "3 + sqr(x * 2) / (- (5 + 1)) ^ 2 ^ 3",
-                convertedInfixTokens = "3 + sqr(x * 2) / ((0- (5 + 1))) ^ 2 ^ 3";
+        //3 + sqr(x * 2) / (- (5 + 1)) ^ 2 ^ 3
+        //3 + sqr(x * 2) / ((0- (5 + 1))) ^ 2 ^ 3
+        String infixTokens = "20+4-7^-sin(4+(2-1))+24",
+                convertedInfixTokens = "20+4-7^(0-sin(4+(2-1)))+24";
 
         ExpressionTokenizer tokenizer;
 
         tokenizer = new ExpressionTokenizer(infixTokens);
         LinkedList<Token> infix = tokenizer.getTokensList();
+
 
         tokenizer = new ExpressionTokenizer(convertedInfixTokens);
         LinkedList<Token> expectedConversion = tokenizer.getTokensList();

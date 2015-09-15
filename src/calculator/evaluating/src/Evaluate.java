@@ -1,4 +1,4 @@
-package calculator.parsing.src;
+package calculator.evaluating.src;
 
 import calculator.tokenizing.src.FunctionToken;
 import calculator.tokenizing.src.NumberToken;
@@ -73,10 +73,9 @@ public class Evaluate {
 
     /**
      * Método que evalúa una expresión representada por una lista
-     * de Tokens en notación infija. Para esto, dicha lista se convierte a
-     * notación posfija y se realiza la evaluación por medio de una pila.
-     * @param postfixTokens - lista de tokens en notación infija.
-     * @param currentEvaluation - valor que tomará la variable, en caso de haber.
+     * de Tokens en notación posfija. Para esto, se hace uso de una pila.
+     * @param postfixTokens - lista de tokens en notación posfija.
+     * @param currentEvaluation - valor que tomará la variable, en caso de existir una.
      * @return double - resultado de la evaluación de la expresión.
      * @throws ArithmeticException si se detecta una potencia fraccionaria de un
      * número negativo, o alguna división entre cero.
@@ -167,6 +166,15 @@ public class Evaluate {
         return result;
     }
 
+    /**
+     * Método que toma una expresión (tokenizada) en gramática infija,
+     * y la convierte a otra que vive dentro de la misma gramática. Pero con
+     * la posibilidad de poder ser expresada también en una gramática posfija,
+     * utilizando el método "infixToPosfix" dentro de esta misma clase.
+     * @param infixTokens - lista de tokens a ser convertida.
+     * @return LinkedList<Token> - lista de tokens en la forma correcta para
+     * poder ser convertida a notación posfija.
+     */
     public static LinkedList<Token> unaryMinusConverter(LinkedList<Token> infixTokens){
         LinkedList<Token> convertedInfixTokens = new LinkedList<>();
 
@@ -174,7 +182,8 @@ public class Evaluate {
             Token present = infixTokens.get(i);
             if(present.getType() == Token.MINUS){
                 if(i == 0){
-                    if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS){
+                    if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS
+                            || infixTokens.get(i + 1) instanceof FunctionToken){
                         int balanced = 0;
                         convertedInfixTokens.addLast(new OperatorToken('('));
                         convertedInfixTokens.addLast(new NumberToken(0));
@@ -201,7 +210,8 @@ public class Evaluate {
                     }
                 }else{
                     if(infixTokens.get(i-1) instanceof OperatorToken){
-                        if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS){
+                        if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS
+                                || infixTokens.get(i + 1) instanceof FunctionToken){
                             int balanced = 0;
                             convertedInfixTokens.addLast(new OperatorToken('('));
                             convertedInfixTokens.addLast(new NumberToken(0));
