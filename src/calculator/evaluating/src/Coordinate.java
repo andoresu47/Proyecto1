@@ -34,4 +34,27 @@ public class Coordinate {
     public double getyCoordinate() {
         return yCoordinate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Coordinate that = (Coordinate) o;
+
+        if (Double.compare(that.xCoordinate, xCoordinate) != 0) return false;
+        return Double.compare(that.yCoordinate, yCoordinate) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(xCoordinate);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(yCoordinate);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

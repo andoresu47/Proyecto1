@@ -1,5 +1,6 @@
 package calculator.evaluating.test;
 
+import calculator.evaluating.src.Coordinate;
 import calculator.evaluating.src.Evaluate;
 import calculator.parsing.src.Parser;
 import calculator.tokenizing.src.ExpressionTokenizer;
@@ -133,11 +134,35 @@ public class EvaluateTest {
     }
 
     /**
-     *
-     * @throws Exception
+     * Método que prueba "generatePoints"; es decir, la
+     * generación de una lista de puntos a partir de la
+     * evaluación de una expresión para distintos valores
+     * dentro de un rango especificado. Esto, sólo si la expresión
+     * contiene alguna variable. De lo contrario se trata de una constante.
+     * @throws Exception si ocurre alguna anomalía.
      */
     @Test
     public void testGeneratePoints() throws Exception {
+        String infixExpression = "1+sqr(2^x)";
+        double xMin = -5.0,
+                xMax = 5.0;
+        int numberOfPoints = 10;
 
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer(infixExpression);
+        LinkedList<Token> infixTokens = tokenizer.getTokensList();
+
+        LinkedList<Coordinate> actualCoordinates = Evaluate.generatePoints(infixTokens, xMin, xMax, numberOfPoints);
+
+        LinkedList<Coordinate> expectedCoordinates = new LinkedList<>();
+        double x = xMin,
+                result;
+        double delta = (xMax-xMin)/numberOfPoints;
+        while(x <= xMax){
+            result = 1+Math.sqrt(Math.pow(2,x)); //1+sqr(2^x)
+            expectedCoordinates.addLast(new Coordinate(x, result));
+            x = x + delta;
+        }
+
+        assertEquals(expectedCoordinates, actualCoordinates);
     }
 }
