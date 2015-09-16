@@ -9,24 +9,28 @@ import java.awt.BorderLayout;
  * los elementos presentes en la aplicación.
  */
 public class MainFrame extends JFrame {
-    private PixelCanvas graphArea;
+    private GraphArea graphArea;
     private FieldSet optionsArea;
     private Toolbar toolbar;
 
+    /**
+     * Constructor del controlador. Se inicializan los distintos elementos
+     * y se organizan en el Frame.
+     */
     public MainFrame(){
         super("Graficador");
 
         setLayout(new BorderLayout());
 
-        graphArea = new PixelCanvas();
+        graphArea = new GraphArea();
         optionsArea = new FieldSet();
         toolbar = new Toolbar();
 
-        add(toolbar, BorderLayout.NORTH);
+        add(toolbar, BorderLayout.PAGE_START);
         add(graphArea, BorderLayout.CENTER);
-        add(optionsArea, BorderLayout.SOUTH);
+        add(optionsArea, BorderLayout.PAGE_END);
 
-        this.setSize(600, 500);
+        this.setSize(670, 500);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
