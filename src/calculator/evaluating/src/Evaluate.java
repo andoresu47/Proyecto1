@@ -25,8 +25,25 @@ public class Evaluate {
      * @return LinkedList<Coordinate> - lista de coordenadas resultante de la
      * evaluación de la expresión.
      */
-    public static LinkedList<Coordinate> generatePoints(LinkedList<Token> infixTokens ,double xMin, double xMax, int numberOfPoints){
-        return null;
+    public static LinkedList<Coordinate> generatePoints(LinkedList<Token> infixTokens, double xMin, double xMax, int numberOfPoints){
+        double difference = xMax - xMin;
+        double step = difference/numberOfPoints;
+
+        LinkedList<Token> postfix = infixToPostfix(infixTokens);
+        LinkedList<Coordinate> coordinates = new LinkedList<>();
+
+        double x = xMin;
+        double evaluation;
+        while (x <= xMax){
+            try {
+                evaluation = postfixEvaluation(postfix, x);
+                coordinates.addLast(new Coordinate(x, evaluation));
+            }catch (ArithmeticException e){
+                //No hace nada
+            }
+            x = x + step;
+        }
+        return coordinates;
     }
 
     /**

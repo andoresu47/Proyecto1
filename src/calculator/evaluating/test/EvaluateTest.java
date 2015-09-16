@@ -6,7 +6,6 @@ import calculator.parsing.src.Parser;
 import calculator.tokenizing.src.ExpressionTokenizer;
 import calculator.tokenizing.src.Token;
 import org.junit.Test;
-import sun.awt.image.ImageWatched;
 
 import java.util.LinkedList;
 
