@@ -3,6 +3,10 @@ package calculator.graphing.src;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Andrés on 15/09/2015.
@@ -22,11 +26,11 @@ public class FieldSet extends JPanel {
                        xMinField,
                        xMaxField,
                        yMinField,
-                       yMaxField,
-                       widthField,
-                       heightField;
+                       yMaxField;
 
     private JButton okButton;
+
+    private InputListener inputListener;
 
     /**
      * Constructor del campo de opciones. Se inicializan cada una de
@@ -38,18 +42,47 @@ public class FieldSet extends JPanel {
         xMaxLabel = new JLabel("xMax: ");
         yMinLabel = new JLabel("yMin: ");
         yMaxLabel = new JLabel("yMax: ");
-        widthLabel = new JLabel("Ancho: ");
-        heightLabel = new JLabel("Alto: ");
+        widthLabel = new JLabel("");
+        heightLabel = new JLabel("");
 
         inputField = new JTextField("<Inserte una expresion>", 30);
         xMinField = new JTextField(5);
         xMaxField = new JTextField(5);
         yMinField = new JTextField(5);
         yMaxField = new JTextField(5);
-        widthField = new JTextField(5);
-        heightField = new JTextField(5);
 
         okButton = new JButton("Graficar");
+
+        okButton.addActionListener(new ActionListener() {
+            /**
+             * Método que determina las acciones a llevar a cabo al presionar el
+             * botón de "Graficar" en el campo de opciones. Como su nombre lo dice, se
+             * procederá a trazar la gráfica de la expresión escrita.
+             * @param e - Acción que accionará el método.
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(inputListener != null){
+                    inputListener.inputEventOccurred(inputField.getText(), xMinField.getText(), xMaxField.getText());
+                }
+            }
+        });
+
+        inputField.addMouseListener(new MouseAdapter() {
+            /**
+             * Método que determina la acción a llevar acabo al hacer click
+             * sobre el campo de inserción de texto de la expresión matemática.
+             * Al dar click por primera vez sobre el campo, se eliminará el
+             * texto que había en él.
+             * @param e - evento que accionará el método.
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (inputField.getText().equals("<Inserte una expresion>")) {
+                    inputField.setText("");
+                }
+            }
+        });
 
         Border innerBorder = BorderFactory.createTitledBorder("Parametros"),
                 outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
@@ -60,14 +93,17 @@ public class FieldSet extends JPanel {
 
     /**
      * Método encargado de organizar los distintos elementos en el Panel.
-     * Este método debe su existencia a la extensión de su contenido.
+     * La organización tiene forma de filas y columnas, con elementos que
+     * pueden abarcar más de una columna de espacio. Este método debe su
+     * existencia a la extensión de su contenido.
      */
     public void layoutComponents(){
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.HORIZONTAL;
 
         //1ra fila - 1ra columna
+        gc.fill = GridBagConstraints.NONE;
+
         gc.gridx = 0;
         gc.gridy = 0;
         gc.weightx = 0.5;
@@ -78,19 +114,22 @@ public class FieldSet extends JPanel {
         add(inputLabel, gc);
 
         //1ra fila - 2da columna
+        gc.fill = GridBagConstraints.HORIZONTAL;
+
         gc.gridx = 1;
         gc.gridy = 0;
         gc.weightx = 0.5;
         gc.weighty = 0.1;
-        gc.gridwidth = 11; //Abarca 11 columnas
+        gc.gridwidth = 7; //Abarca 7 columnas
 
         gc.anchor = GridBagConstraints.LINE_START;
         gc.insets = new Insets(0, 0, 0, 0);
         add(inputField, gc);
 
+        //2da fila - 1ra columna
         gc.gridwidth = 1;
         gc.fill = GridBagConstraints.NONE;
-        //2da fila - 1ra columna
+
         gc.gridx = 0;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -101,6 +140,8 @@ public class FieldSet extends JPanel {
         add(xMinLabel, gc);
 
         //2da fila - 2da columna
+        gc.fill = GridBagConstraints.HORIZONTAL;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -111,6 +152,8 @@ public class FieldSet extends JPanel {
         add(xMinField, gc);
 
         //2da fila - 3ra columna
+        gc.fill = GridBagConstraints.NONE;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -121,6 +164,8 @@ public class FieldSet extends JPanel {
         add(xMaxLabel, gc);
 
         //2da fila - 4ta columna
+        gc.fill = GridBagConstraints.HORIZONTAL;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -131,6 +176,8 @@ public class FieldSet extends JPanel {
         add(xMaxField, gc);
 
         //2da fila - 5ta columna
+        gc.fill = GridBagConstraints.NONE;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -141,6 +188,8 @@ public class FieldSet extends JPanel {
         add(yMinLabel, gc);
 
         //2da fila - 6ta columna
+        gc.fill = GridBagConstraints.HORIZONTAL;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -151,6 +200,8 @@ public class FieldSet extends JPanel {
         add(yMinField, gc);
 
         //2da fila - 7ma columna
+        gc.fill = GridBagConstraints.NONE;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -161,6 +212,8 @@ public class FieldSet extends JPanel {
         add(yMaxLabel, gc);
 
         //2da fila - 8va columna
+        gc.fill = GridBagConstraints.HORIZONTAL;
+
         gc.gridx++;
         gc.gridy = 1;
         gc.weightx = 0.5;
@@ -170,29 +223,21 @@ public class FieldSet extends JPanel {
         gc.insets = new Insets(10, 0, 0, 0);
         add(yMaxField, gc);
 
-        //2da fila - 9na columna
-        gc.gridx++;
-        gc.gridy = 1;
+        //3ra fila - 1ra columna
+        gc.fill = GridBagConstraints.NONE;
+
+        gc.gridx = 0;
+        gc.gridy = 2;
         gc.weightx = 0.5;
         gc.weighty = 0.1;
 
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.insets = new Insets(10, 10, 0, 0);
+        gc.insets = new Insets(10, 0, 0, 0);
         add(widthLabel, gc);
 
-        //2da fila - 10ma columna
+        //3ra fila - 2da columna
         gc.gridx++;
-        gc.gridy = 1;
-        gc.weightx = 0.5;
-        gc.weighty = 0.1;
-
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10, 0, 0, 0);
-        add(widthField, gc);
-
-        //2da fila - 11va columna
-        gc.gridx++;
-        gc.gridy = 1;
+        gc.gridy = 2;
         gc.weightx = 0.5;
         gc.weighty = 0.1;
 
@@ -200,18 +245,8 @@ public class FieldSet extends JPanel {
         gc.insets = new Insets(10, 10, 0, 0);
         add(heightLabel, gc);
 
-        //2da fila - 12va columna
-        gc.gridx++;
-        gc.gridy = 1;
-        gc.weightx = 0.5;
-        gc.weighty = 0.1;
-
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10, 0, 0, 0);
-        add(heightField, gc);
-
-        //3ra fila - 1ra columna
-        gc.gridx = 10;
+        //3ra fila - 6ta columna
+        gc.gridx = 6;
         gc.gridwidth = 2;
         gc.gridy = 2;
         gc.weightx = 0;
@@ -221,5 +256,34 @@ public class FieldSet extends JPanel {
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.insets = new Insets(20, 0, 0, 0);
         add(okButton, gc);
+
+    }
+
+    /**
+     * Método que asigna un escucha (o "manejador de eventos") al campo especificado.
+     * @param inputListener - escucha a asignar.
+     */
+    public void setInputListener(InputListener inputListener) {
+        this.inputListener = inputListener;
+    }
+
+    /**
+     * Método que recibe un entero como parámetro y lo utiliza para escribir en la ventana
+     * principal de la aplicación un mensaje indicando el ancho en pixeles que ocupa actualmente
+     * el área de graficación de funciones.
+     * @param graphWidth - entero que representa el ancho del área de graficación actual.
+     */
+    public void setGraphWidth(int graphWidth) {
+        widthLabel.setText("Ancho:  " + graphWidth + " px");
+    }
+
+    /**
+     * Método que recibe un entero como parámetro y lo utiliza para escribir en la ventana
+     * principal de la aplicación un mensaje indicando la altura en pixeles que ocupa actualmente
+     * el área de graficación de funciones.
+     * @param graphHeight - entero que representa el alto del área de graficación actual.
+     */
+    public void setGraphHeight(int graphHeight) {
+        heightLabel.setText("Alto:  " + graphHeight + " px");
     }
 }

@@ -247,7 +247,14 @@ public class Evaluate {
                         i++;
                     }
                 }else{
-                    if(infixTokens.get(i-1) instanceof OperatorToken){
+                    int condition = infixTokens.get(i-1).getType();
+                    //Se excluye de las condiciones el paréntesis derecho.
+                    if(condition == Token.PLUS
+                            || condition == Token.MINUS
+                            || condition == Token.PRODUCT
+                            || condition == Token.DIVISION
+                            || condition == Token.EXP
+                            || condition == Token.LEFT_PARENTHESIS){
                         if(infixTokens.get(i + 1).getType() == Token.LEFT_PARENTHESIS
                                 || infixTokens.get(i + 1) instanceof FunctionToken){
                             int balanced = 0;

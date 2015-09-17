@@ -7,7 +7,11 @@ import javax.swing.*;
  * Clase que ejecuta la aplicación.
  */
 public class App{
-
+    /**
+     * Método main que inicializa nuestra aplicación en un
+     * thread de ejecución.
+     * @param args - argumentos recibidos de línea de comando.
+     */
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(new Runnable() {
