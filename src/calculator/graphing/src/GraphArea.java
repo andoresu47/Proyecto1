@@ -14,23 +14,12 @@ public class GraphArea extends JPanel {
 
     private LinkedList<Coordinate> coordinates = null;
 
+    private Coordinate center = new Coordinate(0,0);
+
     private WeightHeightListener weightHeightListener;
 
     private int pastWidth = 0,
                 pastHeight = 0;
-
-    /**
-     * Constructor que recibe como argumento a un escucha, que
-     * se encarga de hacerle saber las dimensiones de esta ventana
-     * al panel de opciones para cada cambio que haya en esta. Se
-     * inicializa en el constructor, pues se necesita que se accione
-     * desde que se crea una instancia de la clase.
-     * @param weightHeightListener - escucha que maneja la comunicación entre
-     *                             esta clase y "FieldSet".
-     */
-    public GraphArea(WeightHeightListener weightHeightListener){
-        setWeightHeightListener(weightHeightListener);
-    }
 
     /**
      * Método que se encarga del trazado de pixeles en el área
@@ -51,6 +40,8 @@ public class GraphArea extends JPanel {
         int presentWidth = size.width ;
         int presentHeight = size.height;
 
+        //Se dibujan los ejes, siempre tomando en cuenta el ancho y alto
+        setGrid(presentWidth, presentHeight, g);
         setAxes(presentWidth, presentHeight, g);
 
         if(coordinates != null){
@@ -87,12 +78,72 @@ public class GraphArea extends JPanel {
 
         g2d.setColor(Color.BLACK);
 
-        g2d.drawLine(0, height / 2, width, height / 2);
-        g2d.drawLine(width / 2, 0, width / 2, height);
+        g2d.setStroke(new BasicStroke(1));
+
+        int xMidpoint = Math.round(width / 2) - (int)center.getxCoordinate(),
+                yMidpoint = (int)center.getyCoordinate() + Math.round(height / 2);
+
+        g2d.drawLine(0, yMidpoint, width, yMidpoint);
+        g2d.drawLine(xMidpoint, 0, xMidpoint, height);
 
         g.setFont(new Font("Verdana", Font.PLAIN, 15));
-        g.drawString("x", width - 20, height / 2 + 20);
-        g.drawString("y", width/2 - 20, 20);
+        g.drawString("x", width - 20, height - 20);
+        g.drawString("y", 20, 20);
+    }
+
+    /**
+     * Método que se encarga de definir una malla coordenada, y la
+     * reescala según se modifique la ventana de visualización, o bien
+     * la escala de valores en "x" y "y".
+     * @param width - ancho actual del área de graficado.
+     * @param height - largo actual del área de graficado.
+     * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
+     */
+    public void setGrid(int width, int height, Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(Color.LIGHT_GRAY);
+
+        float[] dashingPattern = {2f, 2f};
+        Stroke stroke = new BasicStroke(1f, BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER, 1.0f, dashingPattern, 2.0f);
+
+        g2d.setStroke(stroke);
+
+        int interval = 10;
+
+        int xStep = Math.round(width/interval),
+            yStep = Math.round(height/interval),
+                xMidpoint = Math.round(width/2) - (int)center.getxCoordinate(),
+                yMidpoint = Math.round(height/2) + (int)center.getyCoordinate();
+
+        //Se hace esto de definir el centro como el punto de partida del trazado, puesto que los pixeles son números
+        //enteros, y no tienen la precisión que si tienen las coordenadas abstractas, entonces, si
+        //no empezara por mis ejes coordenados, se tendría una malla desfasada con respecto a estos por
+        //unos cuantos pixeles que, aunque es poco, se ve desagradable.
+        int x, y;
+
+        x = xMidpoint;
+        while(x < width){
+            g2d.drawLine(x, 0, x, height);
+            x = x + xStep;
+        }
+        x = xMidpoint;
+        while(x > 0){
+            g2d.drawLine(x, 0, x, height);
+            x = x - xStep;
+        }
+
+        y = yMidpoint;
+        while(y < height){
+            g2d.drawLine(0, y, width, y);
+            y = y + yStep;
+        }
+        y = yMidpoint;
+        while(y > 0){
+            g2d.drawLine(0, y, width, y);
+            y = y - yStep;
+        }
     }
 
     /**
@@ -114,15 +165,15 @@ public class GraphArea extends JPanel {
 
         for (int i = 1; i < coordinates.size(); i++) {
             currentPoint = coordinates.get(i-1);
-            x1 = (int) currentPoint.getxCoordinate();
-            y1 = (int) currentPoint.getyCoordinate();
+            x1 = (int)Math.round(currentPoint.getxCoordinate());
+            y1 = (int)Math.round(currentPoint.getyCoordinate());
 
             currentPoint = coordinates.get(i);
-            x2 = (int) currentPoint.getxCoordinate();
-            y2 = (int) currentPoint.getyCoordinate();
+            x2 = (int)Math.round(currentPoint.getxCoordinate());
+            y2 = (int)Math.round(currentPoint.getyCoordinate());
 
             //Condición para que no se dibuje una línea entre puntos separados por una asíntota.
-            if((y2 - y1) < 1000){
+            if(Math.abs(y2 - y1) < 100){
                 g2d.drawLine(x1, y1, x2, y2);
             }
         }
@@ -135,5 +186,14 @@ public class GraphArea extends JPanel {
      */
     public void setWeightHeightListener(WeightHeightListener weightHeightListener) {
         this.weightHeightListener = weightHeightListener;
+    }
+
+    /**
+     * Coordenadas en pixeles del punto medio del área de graficado. Estas se
+     * usan para reescalar los ejes y la malla coordenados.
+     * @param center - coordenadas en pizeles del nuevo centro.
+     */
+    public void setCenter(Coordinate center) {
+        this.center = center;
     }
 }

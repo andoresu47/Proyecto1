@@ -42,26 +42,7 @@ public class MainFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        graphArea = new GraphArea(new WeightHeightListener() {
-            /**
-             * Método que determina las acciones a llevar a cabo al generarse
-             * un cambio en el tamaño de la ventana de la aplicación. Se avisará
-             * al área de opciones el nuevo tamaño (ancho y alto en pixeles) de la
-             * zona de graficación.
-             * @param newWidth - nuevo valor del ancho del área de graficación.
-             * @param newHeight - nuevo valor del alto del área de graficación.
-             */
-            @Override
-            public void windowSizeChangeOccurred(int newWidth, int newHeight) {
-                optionsArea.setGraphWidth(newWidth);
-                optionsArea.setGraphHeight(newHeight);
-                setWidth(newWidth);
-                setHeight(newHeight);
-                if(postfixTokens != null){
-                    reDrawGraph();
-                }
-            }
-        });
+        graphArea = new GraphArea();
         optionsArea = new FieldSet();
         toolbar = new Toolbar();
 
@@ -91,6 +72,27 @@ public class MainFrame extends JFrame {
                     optionsArea.setYmaxErrorText("Valor invalido.");
                 } catch (SyntaxException e) {
                     optionsArea.setExpressionErrorText("Error de sintaxis.");
+                }
+            }
+        });
+
+        graphArea.setWeightHeightListener(new WeightHeightListener() {
+            /**
+             * Método que determina las acciones a llevar a cabo al generarse
+             * un cambio en el tamaño de la ventana de la aplicación. Se avisará
+             * al área de opciones el nuevo tamaño (ancho y alto en pixeles) de la
+             * zona de graficación.
+             * @param newWidth - nuevo valor del ancho del área de graficación.
+             * @param newHeight - nuevo valor del alto del área de graficación.
+             */
+            @Override
+            public void windowSizeChangeOccurred(int newWidth, int newHeight) {
+                optionsArea.setGraphWidth(newWidth);
+                optionsArea.setGraphHeight(newHeight);
+                setWidth(newWidth);
+                setHeight(newHeight);
+                if(postfixTokens != null){
+                    reDrawGraph();
                 }
             }
         });
@@ -224,6 +226,7 @@ public class MainFrame extends JFrame {
             newYinPixels = yOrigin + ((midPointY - abstractY) * yTransformationFactor);
             rescaled.addLast(new Coordinate(newXinPixels, newYinPixels));
         }
+        graphArea.setCenter(new Coordinate(midPointX*xTransformationFactor, midPointY*yTransformationFactor));
         return rescaled;
     }
 }

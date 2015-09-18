@@ -46,10 +46,10 @@ public class FieldSet extends JPanel {
         heightLabel = new JLabel("");
 
         inputField = new JTextField("<Escriba una expresion>", 30);
-        xMinField = new JTextField(5);
-        xMaxField = new JTextField(5);
-        yMinField = new JTextField(5);
-        yMaxField = new JTextField(5);
+        xMinField = new JTextField("-10", 5);
+        xMaxField = new JTextField("10", 5);
+        yMinField = new JTextField("-10", 5);
+        yMaxField = new JTextField("10", 5);
 
         okButton = new JButton("Graficar");
 
