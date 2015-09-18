@@ -45,7 +45,7 @@ public class FieldSet extends JPanel {
         widthLabel = new JLabel("");
         heightLabel = new JLabel("");
 
-        inputField = new JTextField("<Inserte una expresion>", 30);
+        inputField = new JTextField("<Escriba una expresion>", 30);
         xMinField = new JTextField(5);
         xMaxField = new JTextField(5);
         yMinField = new JTextField(5);
@@ -97,7 +97,7 @@ public class FieldSet extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String fieldText = inputField.getText();
-                if (fieldText.equals("<Inserte una expresion>")
+                if (fieldText.equals("<Escriba una expresion>")
                         || fieldText.equals("Error de sintaxis.")
                         || fieldText.equals("Expresion invalida.")) {
                     inputField.setForeground(Color.BLACK);

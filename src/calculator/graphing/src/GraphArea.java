@@ -16,6 +16,9 @@ public class GraphArea extends JPanel {
 
     private WeightHeightListener weightHeightListener;
 
+    private int pastWidth = 0,
+                pastHeight = 0;
+
     /**
      * Constructor que recibe como argumento a un escucha, que
      * se encarga de hacerle saber las dimensiones de esta ventana
@@ -45,16 +48,22 @@ public class GraphArea extends JPanel {
         setBackground(Color.WHITE);
 
         Dimension size = getSize();
-        int width = size.width ;
-        int height = size.height;
+        int presentWidth = size.width ;
+        int presentHeight = size.height;
 
-        setAxes(width, height, g);
+        setAxes(presentWidth, presentHeight, g);
 
         if(coordinates != null){
             drawGraph(g);
         }
 
-        weightHeightListener.windowSizeChangeOccurred(width, height);
+        //Sólo si hubo un cambio de tamaño de ventana, se hace la notificación al MainFrame
+        if(presentWidth != pastWidth || presentHeight != pastHeight){
+            weightHeightListener.windowSizeChangeOccurred(presentWidth, presentHeight);
+        }
+
+        pastWidth = presentWidth;
+        pastHeight = presentHeight;
     }
 
     /**
@@ -99,7 +108,7 @@ public class GraphArea extends JPanel {
         g2d.setStroke(new BasicStroke(2));
 
         int x1,x2,
-            y1,y2;
+                y1,y2;
 
         Coordinate currentPoint;
 

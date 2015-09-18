@@ -79,17 +79,17 @@ public class MainFrame extends JFrame {
              */
             @Override
             public void inputEventOccurred(String expression, String xMin, String xMax, String yMin, String yMax) {
-                try{
+                try {
                     logicHandler(expression, xMin, xMax, yMin, yMax);
-                }catch (XMinException e){
+                } catch (XMinException e) {
                     optionsArea.setXminErrorText("Valor invalido.");
-                }catch (XMaxException e){
+                } catch (XMaxException e) {
                     optionsArea.setXmaxErrorText("Valor invalido.");
-                }catch (YMinException e){
+                } catch (YMinException e) {
                     optionsArea.setYminErrorText("Valor invalido.");
-                }catch (YMaxException e){
+                } catch (YMaxException e) {
                     optionsArea.setYmaxErrorText("Valor invalido.");
-                }catch (SyntaxException e){
+                } catch (SyntaxException e) {
                     optionsArea.setExpressionErrorText("Error de sintaxis.");
                 }
             }
@@ -214,11 +214,14 @@ public class MainFrame extends JFrame {
                 yTransformationFactor = heightOfGraphArea/yDifference;
         double xOrigin = widthOfGraphArea/2,
                 yOrigin = heightOfGraphArea/2;
+        double midPointX = (xMax + xMin)/2,
+                midPointY = (yMax + yMin)/2;
+
         for(Coordinate present : rawPoints){
             abstractX = present.getxCoordinate();
             abstractY = present.getyCoordinate();
-            newXinPixels = (abstractX * xTransformationFactor) + xOrigin;
-            newYinPixels = yOrigin - (abstractY * yTransformationFactor);
+            newXinPixels = ((abstractX - midPointX) * xTransformationFactor) + xOrigin;
+            newYinPixels = yOrigin + ((midPointY - abstractY) * yTransformationFactor);
             rescaled.addLast(new Coordinate(newXinPixels, newYinPixels));
         }
         return rescaled;
