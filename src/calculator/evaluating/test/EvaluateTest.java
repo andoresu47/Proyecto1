@@ -149,8 +149,9 @@ public class EvaluateTest {
 
         ExpressionTokenizer tokenizer = new ExpressionTokenizer(infixExpression);
         LinkedList<Token> infixTokens = tokenizer.getTokensList();
+        LinkedList<Token> postfixTokens = Evaluate.infixToPostfix(infixTokens);
 
-        LinkedList<Coordinate> actualCoordinates = Evaluate.generatePoints(infixTokens, xMin, xMax, numberOfPoints);
+        LinkedList<Coordinate> actualCoordinates = Evaluate.generatePoints(postfixTokens, xMin, xMax, numberOfPoints);
 
         LinkedList<Coordinate> expectedCoordinates = new LinkedList<>();
         double x = xMin,

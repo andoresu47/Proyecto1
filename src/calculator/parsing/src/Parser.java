@@ -113,7 +113,7 @@ public class Parser {
      * @return true - si la forma es correcta, false en caso contrario.
      */
     private static boolean parseFunctionExpression(LinkedList<Token> tokensList){
-        if(tokensList.size() < 6){
+        if(tokensList.size() < 4){
             return false;
         }
 

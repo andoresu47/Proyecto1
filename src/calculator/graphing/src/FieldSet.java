@@ -62,12 +62,30 @@ public class FieldSet extends JPanel {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(inputListener != null){
-                    inputListener.inputEventOccurred(inputField.getText(), xMinField.getText(), xMaxField.getText());
+                if (inputListener != null) {
+                    inputListener.inputEventOccurred(inputField.getText(),
+                            xMinField.getText(),
+                            xMaxField.getText(),
+                            yMinField.getText(),
+                            yMaxField.getText());
                 }
             }
         });
 
+        Border innerBorder = BorderFactory.createTitledBorder("Parametros"),
+                outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
+        this.setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+
+        layoutComponents();
+        setMouseClicks();
+    }
+
+    /**
+     * Método encargado de definir las acciones del programa al hacer click sobre las
+     * distintas opciones del campo de entradas.Como todop esto fue mucho código, se
+     * relegó a su propio método.
+     */
+    public void setMouseClicks(){
         inputField.addMouseListener(new MouseAdapter() {
             /**
              * Método que determina la acción a llevar acabo al hacer click
@@ -78,17 +96,83 @@ public class FieldSet extends JPanel {
              */
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (inputField.getText().equals("<Inserte una expresion>")) {
+                String fieldText = inputField.getText();
+                if (fieldText.equals("<Inserte una expresion>")
+                        || fieldText.equals("Error de sintaxis.")
+                        || fieldText.equals("Expresion invalida.")) {
+                    inputField.setForeground(Color.BLACK);
                     inputField.setText("");
                 }
             }
         });
 
-        Border innerBorder = BorderFactory.createTitledBorder("Parametros"),
-                outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
-        this.setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+        xMinField.addMouseListener(new MouseAdapter() {
+            /**
+             * Método que determina la acción a llevar acabo al hacer click
+             * sobre el campo de inserción de texto del rango izquierdo de x.
+             * Solo si ha habido un error de input previo, se notará alguna acción.
+             * @param e - evento que accionará el método.
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String fieldText = xMinField.getText();
+                if (fieldText.equals("Valor invalido.")) {
+                    xMinField.setForeground(Color.BLACK);
+                    xMinField.setText("");
+                }
+            }
+        });
 
-        layoutComponents();
+        xMaxField.addMouseListener(new MouseAdapter() {
+            /**
+             * Método que determina la acción a llevar acabo al hacer click
+             * sobre el campo de inserción de texto del rango derecho de x.
+             * Solo si ha habido un error de input previo, se notará alguna acción.
+             * @param e - evento que accionará el método.
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String fieldText = xMaxField.getText();
+                if (fieldText.equals("Valor invalido.")) {
+                    xMaxField.setForeground(Color.BLACK);
+                    xMaxField.setText("");
+                }
+            }
+        });
+
+        yMinField.addMouseListener(new MouseAdapter() {
+            /**
+             * Método que determina la acción a llevar acabo al hacer click
+             * sobre el campo de inserción de texto del rango izquierdo de y.
+             * Solo si ha habido un error de input previo, se notará alguna acción.
+             * @param e - evento que accionará el método.
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String fieldText = yMinField.getText();
+                if (fieldText.equals("Valor invalido.")) {
+                    yMinField.setForeground(Color.BLACK);
+                    yMinField.setText("");
+                }
+            }
+        });
+
+        yMaxField.addMouseListener(new MouseAdapter() {
+            /**
+             * Método que determina la acción a llevar acabo al hacer click
+             * sobre el campo de inserción de texto del rango derecho de y.
+             * Solo si ha habido un error de input previo, se notará alguna acción.
+             * @param e - evento que accionará el método.
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String fieldText = yMaxField.getText();
+                if (fieldText.equals("Valor invalido.")) {
+                    yMaxField.setForeground(Color.BLACK);
+                    yMaxField.setText("");
+                }
+            }
+        });
     }
 
     /**
@@ -285,5 +369,55 @@ public class FieldSet extends JPanel {
      */
     public void setGraphHeight(int graphHeight) {
         heightLabel.setText("Alto:  " + graphHeight + " px");
+    }
+
+    /**
+     * Método encargado de mostrar en el recuadro de texto correspondiente
+     * a la inserción de una expresión, un mensaje de error en caso de darse.
+     * @param message - mensaje de error (pintado en rojo) a desplegar en pantalla.
+     */
+    public void setExpressionErrorText(String message){
+        inputField.setForeground(Color.RED);
+        inputField.setText(message);
+    }
+
+    /**
+     * Método encargado de mostrar en el recuadro de texto correspondiente
+     * a la inserción de xMin, un mensaje de error en caso de darse.
+     * @param message - mensaje de error (pintado en rojo) a desplegar en pantalla.
+     */
+    public void setXminErrorText(String message){
+        xMinField.setForeground(Color.RED);
+        xMinField.setText(message);
+    }
+
+    /**
+     * Método encargado de mostrar en el recuadro de texto correspondiente
+     * a la inserción de xMax, un mensaje de error en caso de darse.
+     * @param message - mensaje de error (pintado en rojo) a desplegar en pantalla.
+     */
+    public void setXmaxErrorText(String message){
+        xMaxField.setForeground(Color.RED);
+        xMaxField.setText(message);
+    }
+
+    /**
+     * Método encargado de mostrar en el recuadro de texto correspondiente
+     * a la inserción de yMin, un mensaje de error en caso de darse.
+     * @param message - mensaje de error (pintado en rojo) a desplegar en pantalla.
+     */
+    public void setYminErrorText(String message){
+        yMinField.setForeground(Color.RED);
+        yMinField.setText(message);
+    }
+
+    /**
+     * Método encargado de mostrar en el recuadro de texto correspondiente
+     * a la inserción de yMax, un mensaje de error en caso de darse.
+     * @param message - mensaje de error (pintado en rojo) a desplegar en pantalla.
+     */
+    public void setYmaxErrorText(String message){
+        yMaxField.setForeground(Color.RED);
+        yMaxField.setText(message);
     }
 }

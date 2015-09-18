@@ -18,25 +18,24 @@ public class Evaluate {
      * Método encargado de generar una lista de coordenadas a
      * partir de la evaluación de una expresión para cierto rango y
      * número de puntos en el eje x.
-     * @param infixTokens - lista de tokens válida, en notación infija.
+     * @param postfixTokens - lista de tokens válida, en notación posfija.
      * @param xMin - límite izquierdo de la evaluación.
      * @param xMax - límite derecho de la evaluación.
      * @param numberOfPoints - número de puntos a evaluar.
      * @return LinkedList<Coordinate> - lista de coordenadas resultante de la
      * evaluación de la expresión.
      */
-    public static LinkedList<Coordinate> generatePoints(LinkedList<Token> infixTokens, double xMin, double xMax, int numberOfPoints){
+    public static LinkedList<Coordinate> generatePoints(LinkedList<Token> postfixTokens, double xMin, double xMax, int numberOfPoints){
         double difference = xMax - xMin;
         double step = difference/numberOfPoints;
 
-        LinkedList<Token> postfix = infixToPostfix(infixTokens);
         LinkedList<Coordinate> coordinates = new LinkedList<>();
 
         double x = xMin;
         double evaluation;
         while (x <= xMax){
             try {
-                evaluation = postfixEvaluation(postfix, x);
+                evaluation = postfixEvaluation(postfixTokens, x);
                 coordinates.addLast(new Coordinate(x, evaluation));
             }catch (ArithmeticException e){
                 //No hace nada
@@ -98,7 +97,7 @@ public class Evaluate {
                     postfixTokens.addLast(operatorStack.pop());
                 }
                 operatorStack.pop();
-                if(operatorStack.peek() instanceof FunctionToken){
+                if(!operatorStack.isEmpty() && operatorStack.peek() instanceof FunctionToken){
                     postfixTokens.addLast(operatorStack.pop());
                 }
             }

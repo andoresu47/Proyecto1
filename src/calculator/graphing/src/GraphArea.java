@@ -12,7 +12,7 @@ import java.util.LinkedList;
  */
 public class GraphArea extends JPanel {
 
-    private LinkedList<Coordinate> coordinates;
+    private LinkedList<Coordinate> coordinates = null;
 
     private WeightHeightListener weightHeightListener;
 
@@ -44,17 +44,15 @@ public class GraphArea extends JPanel {
 
         setBackground(Color.WHITE);
 
-        Graphics2D g2d = (Graphics2D) g;
-
-        g2d.setColor(Color.red);
-
-        //g2d.drawLine(100, 100, 250, 300);
-
         Dimension size = getSize();
         int width = size.width ;
         int height = size.height;
 
         setAxes(width, height, g);
+
+        if(coordinates != null){
+            drawGraph(g);
+        }
 
         weightHeightListener.windowSizeChangeOccurred(width, height);
     }
@@ -65,6 +63,7 @@ public class GraphArea extends JPanel {
      */
     public void setCoordinates(LinkedList<Coordinate> coordinates) {
         this.coordinates = coordinates;
+        this.repaint();
     }
 
     /**
@@ -82,9 +81,42 @@ public class GraphArea extends JPanel {
         g2d.drawLine(0, height / 2, width, height / 2);
         g2d.drawLine(width / 2, 0, width / 2, height);
 
-        g.setFont(new Font("Verdana", Font.PLAIN, 20));
+        g.setFont(new Font("Verdana", Font.PLAIN, 15));
         g.drawString("x", width - 20, height / 2 + 20);
         g.drawString("y", width/2 - 20, 20);
+    }
+
+    /**
+     * Método que se encarga de pintar el gráfico en su área designada. Para
+     * esto, se toma la lista de coordenadas de pixeles y se van dibujando una a
+     * una, uniendolas por pares con líneas rectas. Dado que con muchos puntos, el
+     * efecto de la recta se pierde y si se pueden apreciar formas curvas.
+     * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
+     */
+    public void drawGraph(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.RED);
+        g2d.setStroke(new BasicStroke(2));
+
+        int x1,x2,
+            y1,y2;
+
+        Coordinate currentPoint;
+
+        for (int i = 1; i < coordinates.size(); i++) {
+            currentPoint = coordinates.get(i-1);
+            x1 = (int) currentPoint.getxCoordinate();
+            y1 = (int) currentPoint.getyCoordinate();
+
+            currentPoint = coordinates.get(i);
+            x2 = (int) currentPoint.getxCoordinate();
+            y2 = (int) currentPoint.getyCoordinate();
+
+            //Condición para que no se dibuje una línea entre puntos separados por una asíntota.
+            if((y2 - y1) < 1000){
+                g2d.drawLine(x1, y1, x2, y2);
+            }
+        }
     }
 
     /**

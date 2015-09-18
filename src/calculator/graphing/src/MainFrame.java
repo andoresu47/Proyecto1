@@ -1,7 +1,15 @@
 package calculator.graphing.src;
 
+import calculator.evaluating.src.Coordinate;
+import calculator.evaluating.src.Evaluate;
+import calculator.graphing.customExceptions.*;
+import calculator.parsing.src.Parser;
+import calculator.tokenizing.src.ExpressionTokenizer;
+import calculator.tokenizing.src.Token;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * Created by Andrés on 15/09/2015.
@@ -10,10 +18,20 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
     private GraphArea graphArea;
+
     private FieldSet optionsArea;
+
     private Toolbar toolbar;
+
     private int widthOfGraphArea = 670,
                 heightOfGraphArea = 500;
+
+    private LinkedList<Token> postfixTokens = null;
+
+    private double xMin,
+                   xMax,
+                   yMin,
+                   yMax;
 
     /**
      * Constructor del controlador. Se inicializan los distintos elementos
@@ -39,6 +57,9 @@ public class MainFrame extends JFrame {
                 optionsArea.setGraphHeight(newHeight);
                 setWidth(newWidth);
                 setHeight(newHeight);
+                if(postfixTokens != null){
+                    reDrawGraph();
+                }
             }
         });
         optionsArea = new FieldSet();
@@ -57,8 +78,20 @@ public class MainFrame extends JFrame {
              * @param xMax - valor máximo del rango en el eje X.
              */
             @Override
-            public void inputEventOccurred(String expression, String xMin, String xMax) {
-
+            public void inputEventOccurred(String expression, String xMin, String xMax, String yMin, String yMax) {
+                try{
+                    logicHandler(expression, xMin, xMax, yMin, yMax);
+                }catch (XMinException e){
+                    optionsArea.setXminErrorText("Valor invalido.");
+                }catch (XMaxException e){
+                    optionsArea.setXmaxErrorText("Valor invalido.");
+                }catch (YMinException e){
+                    optionsArea.setYminErrorText("Valor invalido.");
+                }catch (YMaxException e){
+                    optionsArea.setYmaxErrorText("Valor invalido.");
+                }catch (SyntaxException e){
+                    optionsArea.setExpressionErrorText("Error de sintaxis.");
+                }
             }
         });
 
@@ -91,5 +124,103 @@ public class MainFrame extends JFrame {
      */
     public void setHeight(int height) {
         this.heightOfGraphArea = height;
+    }
+
+    /**
+     * Método que se encarga de filtrar la información introducida por el usuario en
+     * la interfaz gráfica. Esto, de manera que se verifica si los datos fueron introducidos
+     * correctamente o no. De ser así, se ejecuta el resto del programa normalmente, pero
+     * si se detecta alguna entrada inválida, se detiene la graficación; ie, ni siquiera
+     * se calculan los puntos, y se muestra en pantalla el error que sucedió debido al input
+     * del usuario.
+     * @param newExpression - cadena que representa la función introducida por el usuario en la
+     *                      interfaz gráfica.
+     * @param newXMin - cadena que representa la cota mínima en X definida por el usuario.
+     * @param newXMax - cadena que representa la cota máxima en X definida por el usuario.
+     * @param newYMin - cadena que representa la cota mínima en Y definida por el usuario.
+     * @param newYMax - cadena que representa la cota máxima en Y definida por el usuario.
+     * @throws XMinException si la cadena introducida para xMin no es un real.
+     * @throws XMaxException si la cadena introducida para xMax no es un real.
+     * @throws YMinException si la cadena introducida para yMin no es un real.
+     * @throws YMaxException si la cadena introducida para yMax no es un real.
+     * @throws SyntaxException si el parser detecta un error en la sintaxis de la fórmula.
+     */
+    public void logicHandler(String newExpression, String newXMin, String newXMax, String newYMin, String newYMax)
+            throws XMinException,XMaxException, YMinException, YMaxException, SyntaxException {
+        try{
+            xMin = Double.parseDouble(newXMin);
+        }catch(NumberFormatException e){
+            throw new XMinException();
+        }
+        try{
+            xMax = Double.parseDouble(newXMax);
+        }catch(NumberFormatException e){
+            throw new XMaxException();
+        }try{
+            yMin = Double.parseDouble(newYMin);
+        }catch(NumberFormatException e){
+            throw new YMinException();
+        }
+        try{
+            yMax = Double.parseDouble(newYMax);
+        }catch(NumberFormatException e){
+            throw new YMaxException();
+        }
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer(newExpression);
+        LinkedList<Token> infixTokens = tokenizer.getTokensList();
+        Parser parser = new Parser(infixTokens);
+        if(!parser.isValid()){
+            throw new SyntaxException();
+        }
+        LinkedList<Token> postfixTokens = Evaluate.infixToPostfix(infixTokens);
+        this.postfixTokens = postfixTokens;
+        reDrawGraph();
+    }
+
+    /**
+     * Método que se encarga de hacerle saber al área de trazado de la gráfica los puntos
+     * que se van a graficar. No obstante, si se detecta que una lista de puntos está vacía,
+     * significa que la expresión introducida no es válida, pero sí tiene sintaxis correcta.
+     * Tal sería el caso de una raiz cuadrada de número negativo. Esto se le hace saber al usuario
+     * en caso de que ocurra.
+     */
+    public void reDrawGraph(){
+        LinkedList<Coordinate> rawPoints = Evaluate.generatePoints(postfixTokens, xMin, xMax, widthOfGraphArea);
+        if(rawPoints.isEmpty()){
+            optionsArea.setExpressionErrorText("Expresion invalida.");
+        }else{
+            LinkedList<Coordinate> rescaledPoints = rescalePoints(rawPoints);
+            graphArea.setCoordinates(rescaledPoints);
+        }
+    }
+
+    /**
+     * Método que se encarga de transformar coordenadas del plano cartesiano a coordenadas
+     * en términos de pixeles. Coordenadas que ya pueden ser trazadas directamente por el
+     * área encargada del graficado.
+     * @param rawPoints - coordenadas cartesianas obtenidas de evaluar la expresión introducida
+     *                  por el usuario.
+     * @return LinkedList<Coordinate> - lista de coordenadas transformadas en términos de pixeles.
+     */
+    private LinkedList<Coordinate> rescalePoints(LinkedList<Coordinate> rawPoints){
+        LinkedList<Coordinate> rescaled = new LinkedList<>();
+        double abstractX,
+                abstractY,
+                newXinPixels,
+                newYinPixels;
+        double xDifference = xMax - xMin,
+                yDifference = yMax - yMin;
+        double xTransformationFactor = widthOfGraphArea/xDifference,
+                yTransformationFactor = heightOfGraphArea/yDifference;
+        double xOrigin = widthOfGraphArea/2,
+                yOrigin = heightOfGraphArea/2;
+        for(Coordinate present : rawPoints){
+            abstractX = present.getxCoordinate();
+            abstractY = present.getyCoordinate();
+            newXinPixels = (abstractX * xTransformationFactor) + xOrigin;
+            newYinPixels = yOrigin - (abstractY * yTransformationFactor);
+            rescaled.addLast(new Coordinate(newXinPixels, newYinPixels));
+        }
+        return rescaled;
     }
 }
