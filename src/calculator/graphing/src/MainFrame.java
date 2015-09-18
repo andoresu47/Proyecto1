@@ -7,8 +7,12 @@ import calculator.parsing.src.Parser;
 import calculator.tokenizing.src.ExpressionTokenizer;
 import calculator.tokenizing.src.Token;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.LinkedList;
 
 /**
@@ -46,6 +50,27 @@ public class MainFrame extends JFrame {
         optionsArea = new FieldSet();
         toolbar = new Toolbar();
 
+        graphArea.setWeightHeightListener(new WeightHeightListener() {
+            /**
+             * Método que determina las acciones a llevar a cabo al generarse
+             * un cambio en el tamaño de la ventana de la aplicación. Se avisará
+             * al área de opciones el nuevo tamaño (ancho y alto en pixeles) de la
+             * zona de graficación.
+             * @param newWidth - nuevo valor del ancho del área de graficación.
+             * @param newHeight - nuevo valor del alto del área de graficación.
+             */
+            @Override
+            public void windowSizeChangeOccurred(int newWidth, int newHeight) {
+                optionsArea.setGraphWidth(newWidth);
+                optionsArea.setGraphHeight(newHeight);
+                setWidth(newWidth);
+                setHeight(newHeight);
+                if(postfixTokens != null){
+                    reDrawGraph();
+                }
+            }
+        });
+
         optionsArea.setInputListener(new InputListener() {
             /**
              * Método que determina las acciones a llevar a cabo al hacer click sobre el
@@ -76,23 +101,37 @@ public class MainFrame extends JFrame {
             }
         });
 
-        graphArea.setWeightHeightListener(new WeightHeightListener() {
+        toolbar.setClearScreenListener(new ClearScreenListener() {
             /**
-             * Método que determina las acciones a llevar a cabo al generarse
-             * un cambio en el tamaño de la ventana de la aplicación. Se avisará
-             * al área de opciones el nuevo tamaño (ancho y alto en pixeles) de la
-             * zona de graficación.
-             * @param newWidth - nuevo valor del ancho del área de graficación.
-             * @param newHeight - nuevo valor del alto del área de graficación.
+             * Método que se encarga de limpiar la pantalla de la aplicación; es decir,
+             * el área de trazado de gráficas.
              */
             @Override
-            public void windowSizeChangeOccurred(int newWidth, int newHeight) {
-                optionsArea.setGraphWidth(newWidth);
-                optionsArea.setGraphHeight(newHeight);
-                setWidth(newWidth);
-                setHeight(newHeight);
-                if(postfixTokens != null){
-                    reDrawGraph();
+            public void clearScreenEventOccurred() {
+                graphArea.setCoordinates(null);
+                graphArea.setCenter(new Coordinate(0,0));
+            }
+        });
+
+        toolbar.setSaveImageListener(new SaveImageListener() {
+            /**
+             * Método que se encarga de guardar el área de graficación como archivo de
+             * imagen.
+             */
+            @Override
+            public void saveImageEventOccurred() {
+                JFileChooser saveFile = new JFileChooser();
+                saveFile.setAcceptAllFileFilterUsed(false);
+                saveFile.setMultiSelectionEnabled(false);
+                saveFile.addChoosableFileFilter(new FileNameExtensionFilter("Imagenes (*.jpg, *.png, *.gif, *bmp)"
+                        , "jpg", "png", "gif", "bmp"));
+                saveFile.setDialogTitle("Guardar como");
+
+                int userSelection = saveFile.showSaveDialog(null);
+
+                if(userSelection == JFileChooser.APPROVE_OPTION){
+                    File fileToSave = saveFile.getSelectedFile();
+                    saveGraph(fileToSave);
                 }
             }
         });
@@ -147,7 +186,7 @@ public class MainFrame extends JFrame {
      * @throws YMaxException si la cadena introducida para yMax no es un real.
      * @throws SyntaxException si el parser detecta un error en la sintaxis de la fórmula.
      */
-    public void logicHandler(String newExpression, String newXMin, String newXMax, String newYMin, String newYMax)
+    private void logicHandler(String newExpression, String newXMin, String newXMax, String newYMin, String newYMax)
             throws XMinException,XMaxException, YMinException, YMaxException, SyntaxException {
         try{
             xMin = Double.parseDouble(newXMin);
@@ -186,7 +225,7 @@ public class MainFrame extends JFrame {
      * Tal sería el caso de una raiz cuadrada de número negativo. Esto se le hace saber al usuario
      * en caso de que ocurra.
      */
-    public void reDrawGraph(){
+    private void reDrawGraph(){
         LinkedList<Coordinate> rawPoints = Evaluate.generatePoints(postfixTokens, xMin, xMax, widthOfGraphArea);
         if(rawPoints.isEmpty()){
             optionsArea.setExpressionErrorText("Expresion invalida.");
@@ -228,5 +267,29 @@ public class MainFrame extends JFrame {
         }
         graphArea.setCenter(new Coordinate(midPointX*xTransformationFactor, midPointY*yTransformationFactor));
         return rescaled;
+    }
+
+    /**
+     * Método encargado de generar y guardar una imagen de la gráfica que este
+     * en pantalla.
+     * @param file - archivo en el que se guardará la gráfica. Este puede ser cualquier formato de
+     *             imagen.
+     */
+    private void saveGraph(File file){
+        Dimension size = graphArea.getSize();
+        BufferedImage image = new BufferedImage(
+                size.width, size.height
+                , BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        graphArea.paint(g2);
+        try
+        {
+            ImageIO.write(image, "png", file);
+            JOptionPane.showMessageDialog(this, "Se ha guardado exitosamente la imagen.", "Confirmacion", JOptionPane.DEFAULT_OPTION);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Ha ocurrido un problema al guardar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

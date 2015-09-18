@@ -67,13 +67,31 @@ public class GraphArea extends JPanel {
     }
 
     /**
+     * Coordenadas en pixeles del punto medio del área de graficado. Estas se
+     * usan para reescalar los ejes y la malla coordenados.
+     * @param center - coordenadas en pizeles del nuevo centro.
+     */
+    public void setCenter(Coordinate center) {
+        this.center = center;
+    }
+
+    /**
+     * Método que asigna un escucha recibido como parámetro al escucha
+     * definido en la estructura de la clase.
+     * @param weightHeightListener - escucha a asignar al propio de la clase.
+     */
+    public void setWeightHeightListener(WeightHeightListener weightHeightListener) {
+        this.weightHeightListener = weightHeightListener;
+    }
+
+    /**
      * Método que se encarga de definir los ejes coordenados, y los
      * reescala según se modifique la ventana de visualización.
      * @param width - ancho actual del área de graficado.
      * @param height - largo actual del área de graficado.
      * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
      */
-    public void setAxes(int width, int height, Graphics g){
+    private void setAxes(int width, int height, Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setColor(Color.BLACK);
@@ -99,7 +117,7 @@ public class GraphArea extends JPanel {
      * @param height - largo actual del área de graficado.
      * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
      */
-    public void setGrid(int width, int height, Graphics g){
+    private void setGrid(int width, int height, Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setColor(Color.LIGHT_GRAY);
@@ -153,13 +171,15 @@ public class GraphArea extends JPanel {
      * efecto de la recta se pierde y si se pueden apreciar formas curvas.
      * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
      */
-    public void drawGraph(Graphics g){
+    private void drawGraph(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.RED);
         g2d.setStroke(new BasicStroke(2));
 
-        int x1,x2,
-                y1,y2;
+        int x1,
+            x2,
+            y1,
+            y2;
 
         Coordinate currentPoint;
 
@@ -177,23 +197,5 @@ public class GraphArea extends JPanel {
                 g2d.drawLine(x1, y1, x2, y2);
             }
         }
-    }
-
-    /**
-     * Método que asigna un escucha recibido como parámetro al escucha
-     * definido en la estructura de la clase.
-     * @param weightHeightListener - escucha a asignar al propio de la clase.
-     */
-    public void setWeightHeightListener(WeightHeightListener weightHeightListener) {
-        this.weightHeightListener = weightHeightListener;
-    }
-
-    /**
-     * Coordenadas en pixeles del punto medio del área de graficado. Estas se
-     * usan para reescalar los ejes y la malla coordenados.
-     * @param center - coordenadas en pizeles del nuevo centro.
-     */
-    public void setCenter(Coordinate center) {
-        this.center = center;
     }
 }
