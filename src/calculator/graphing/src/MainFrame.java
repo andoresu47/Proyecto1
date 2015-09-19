@@ -30,7 +30,8 @@ public class MainFrame extends JFrame {
     private int widthOfGraphArea = 670,
             heightOfGraphArea = 500;
 
-    private LinkedList<Token> postfixTokens = null;
+    private LinkedList<LinkedList<Token>> postfixList = new LinkedList<>();
+
 
     private double xMin,
             xMax,
@@ -65,7 +66,7 @@ public class MainFrame extends JFrame {
                 optionsArea.setGraphHeight(newHeight);
                 setWidth(newWidth);
                 setHeight(newHeight);
-                if(postfixTokens != null){
+                if(!postfixList.isEmpty()){
                     reDrawGraph();
                 }
             }
@@ -108,9 +109,9 @@ public class MainFrame extends JFrame {
              */
             @Override
             public void clearScreenEventOccurred() {
-                graphArea.setCoordinates(null);
-                graphArea.setCenter(new Coordinate(0,0));
-                postfixTokens = null;
+                graphArea.clearAll();
+                graphArea.setCenter(new Coordinate(0, 0));
+                postfixList.clear();
             }
         });
 
@@ -214,24 +215,36 @@ public class MainFrame extends JFrame {
         if(!parser.isValid()){
             throw new SyntaxException();
         }
-        this.postfixTokens = Evaluate.infixToPostfix(infixTokens);
+        LinkedList<Token> newPostfixTokens = Evaluate.infixToPostfix(infixTokens);
+        if(postfixList.isEmpty()){
+            this.postfixList.addLast(newPostfixTokens);
+        }else{
+            LinkedList<Token> lastPostfixTokens = postfixList.getLast();
+            if(!newPostfixTokens.equals(lastPostfixTokens)){
+                this.postfixList.addLast(newPostfixTokens);
+            }
+        }
         reDrawGraph();
     }
 
     /**
-     * Método que se encarga de hacerle saber al área de trazado de la gráfica los puntos
+     * Método que se encarga de hacerle saber al área de trazado de la gráfica los nuevos puntos
      * que se van a graficar. No obstante, si se detecta que una lista de puntos está vacía,
      * significa que la expresión introducida no es válida, pero sí tiene sintaxis correcta.
      * Tal sería el caso de una raiz cuadrada de número negativo. Esto se le hace saber al usuario
      * en caso de que ocurra.
      */
     private void reDrawGraph(){
-        LinkedList<Coordinate> rawPoints = Evaluate.generatePoints(postfixTokens, xMin, xMax, widthOfGraphArea);
-        if(rawPoints.isEmpty()){
-            optionsArea.setExpressionErrorText("Expresion invalida.");
-        }else{
-            LinkedList<Coordinate> rescaledPoints = rescalePoints(rawPoints);
-            graphArea.setCoordinates(rescaledPoints);
+        graphArea.clearAll();
+        for(LinkedList<Token> postfixTokens : postfixList){
+            LinkedList<Coordinate> rawPoints = Evaluate.generatePoints(postfixTokens, xMin, xMax, widthOfGraphArea);
+            if(rawPoints.isEmpty()){
+                optionsArea.setExpressionErrorText("Expresion invalida.");
+                postfixList.removeLast();
+            }else{
+                LinkedList<Coordinate> rescaledPoints = rescalePoints(rawPoints);
+                graphArea.addCoordinates(rescaledPoints);
+            }
         }
     }
 

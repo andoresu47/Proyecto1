@@ -12,14 +12,24 @@ import java.util.LinkedList;
  */
 public class GraphArea extends JPanel {
 
-    private LinkedList<Coordinate> coordinates = null;
+    private LinkedList<LinkedList<Coordinate>> graphsList;
 
-    private Coordinate center = new Coordinate(0,0);
+    private Coordinate center;
 
     private WeightHeightListener weightHeightListener;
 
-    private int pastWidth = 0,
-            pastHeight = 0;
+    private int pastWidth,
+                pastHeight;
+
+    /**
+     * Constructor que inicializa los elementos de la clase.
+     */
+    public GraphArea(){
+        graphsList = new LinkedList<>();
+        center = new Coordinate(0, 0);
+        pastWidth = 0;
+        pastHeight = 0;
+    }
 
     /**
      * Método que se encarga del trazado de pixeles en el área
@@ -44,8 +54,12 @@ public class GraphArea extends JPanel {
         setGrid(presentWidth, presentHeight, g);
         setAxes(presentWidth, presentHeight, g);
 
-        if(coordinates != null){
-            drawGraph(g);
+        //Se dibujan en pantalla cada uno de los conjuntos de coordenadas de "graphList"
+        if(!graphsList.isEmpty()){
+            for (int i = 0; i < graphsList.size(); i++) {
+                LinkedList<Coordinate> coordinates = graphsList.get(i);
+                drawGraph(coordinates, g, i);
+            }
         }
 
         //Sólo si hubo un cambio de tamaño de ventana, se hace la notificación al MainFrame
@@ -58,11 +72,21 @@ public class GraphArea extends JPanel {
     }
 
     /**
-     * Método que inicializa el conjunto de coordenadas de puntos a graficar.
-     * @param coordinates - coordenadas de puntos.
+     * Método que agrega conjuntos de coordenadas al conjunto de gráficas de la clase,
+     * y actualiza la vista de graficación.
+     * @param coordinates - conjunto de coordenadas de puntos.
      */
-    public void setCoordinates(LinkedList<Coordinate> coordinates) {
-        this.coordinates = coordinates;
+    public void addCoordinates(LinkedList<Coordinate> coordinates) {
+        this.graphsList.addLast(coordinates);
+        this.repaint();
+    }
+
+    /**
+     * Método que inicializa en una lista vacía el conjunto de
+     * conjuntos de coordenadas de puntos a graficar.
+     */
+    public void clearAll() {
+        this.graphsList.clear();
         this.repaint();
     }
 
@@ -171,9 +195,10 @@ public class GraphArea extends JPanel {
      * efecto de la recta se pierde y si se pueden apreciar formas curvas.
      * @param g - instancia de "Graphics" necesaria para el trazado de pixeles.
      */
-    private void drawGraph(Graphics g){
+    private void drawGraph(LinkedList<Coordinate> coordinates, Graphics g, int index){
+
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.RED);
+        g2d.setColor(getColor(index));
         g2d.setStroke(new BasicStroke(2));
 
         int x1,
@@ -193,9 +218,37 @@ public class GraphArea extends JPanel {
             y2 = (int)Math.round(currentPoint.getyCoordinate());
 
             //Condición para que no se dibuje una línea entre puntos separados por una asíntota.
-            if(Math.abs(y2 - y1) < 100){
+            if(Math.abs(y2 - y1) < 10000){
                 g2d.drawLine(x1, y1, x2, y2);
             }
+        }
+    }
+
+    /**
+     * Método que regresa un color que depende de qué gráfica sea la que se esta trazando
+     * según su orden de inserción en la lista.
+     * @param index - índice de la lista al que corresponde el color devuelto por el método.
+     * @return Color - color correspondiente con el índice de la lista en el que se encuentre
+     * la gráfica..
+     */
+    private Color getColor(int index) {
+        switch(index){
+            case 0:
+                return Color.RED;
+            case 1:
+                return Color.BLUE;
+            case 2:
+                return Color.GREEN;
+            case 3:
+                return Color.CYAN;
+            case 4:
+                return Color.MAGENTA;
+            case 5:
+                return Color.ORANGE;
+            case 6:
+                return Color.PINK;
+            default:
+                return getColor(index - 7);
         }
     }
 }
