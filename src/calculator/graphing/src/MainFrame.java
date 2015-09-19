@@ -28,14 +28,14 @@ public class MainFrame extends JFrame {
     private Toolbar toolbar;
 
     private int widthOfGraphArea = 670,
-                heightOfGraphArea = 500;
+            heightOfGraphArea = 500;
 
     private LinkedList<Token> postfixTokens = null;
 
     private double xMin,
-                   xMax,
-                   yMin,
-                   yMax;
+            xMax,
+            yMin,
+            yMax;
 
     /**
      * Constructor del controlador. Se inicializan los distintos elementos
@@ -285,11 +285,11 @@ public class MainFrame extends JFrame {
         try
         {
             ImageIO.write(image, "png", file);
-            JOptionPane.showMessageDialog(this, "Se ha guardado exitosamente la imagen.", "Confirmacion", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La imagen se ha guardado con exito.", "Confirmacion", JOptionPane.PLAIN_MESSAGE);
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(this, "Ha ocurrido un problema al guardar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ocurrio un problema al guardar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

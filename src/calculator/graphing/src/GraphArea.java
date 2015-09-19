@@ -19,7 +19,7 @@ public class GraphArea extends JPanel {
     private WeightHeightListener weightHeightListener;
 
     private int pastWidth = 0,
-                pastHeight = 0;
+            pastHeight = 0;
 
     /**
      * Método que se encarga del trazado de pixeles en el área
@@ -131,7 +131,7 @@ public class GraphArea extends JPanel {
         int interval = 10;
 
         int xStep = Math.round(width/interval),
-            yStep = Math.round(height/interval),
+                yStep = Math.round(height/interval),
                 xMidpoint = Math.round(width/2) - (int)center.getxCoordinate(),
                 yMidpoint = Math.round(height/2) + (int)center.getyCoordinate();
 
@@ -177,9 +177,9 @@ public class GraphArea extends JPanel {
         g2d.setStroke(new BasicStroke(2));
 
         int x1,
-            x2,
-            y1,
-            y2;
+                x2,
+                y1,
+                y2;
 
         Coordinate currentPoint;
 
