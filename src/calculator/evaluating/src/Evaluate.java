@@ -22,7 +22,7 @@ public class Evaluate {
      * @param xMin - límite izquierdo de la evaluación.
      * @param xMax - límite derecho de la evaluación.
      * @param numberOfPoints - número de puntos a evaluar.
-     * @return LinkedList<Coordinate> - lista de coordenadas resultante de la
+     * @return LinkedList - lista de coordenadas resultante de la
      * evaluación de la expresión.
      */
     public static LinkedList<Coordinate> generatePoints(LinkedList<Token> postfixTokens, double xMin, double xMax, int numberOfPoints){
@@ -50,7 +50,7 @@ public class Evaluate {
      * infija, a una lista de tokens en notación posfija. Esto, con el fin de
      * poder evaluarla fácilmente.
      * @param infixTokens - lista de tokens en notación infija.
-     * @return LinkedList<Token> - lista de tokens en notación posfija.
+     * @return LinkedList - lista de tokens en notación posfija.
      */
     public static LinkedList<Token> infixToPostfix(LinkedList<Token> infixTokens){
         Stack<Token> operatorStack = new Stack<>();
@@ -209,7 +209,7 @@ public class Evaluate {
      * la posibilidad de poder ser expresada también en una gramática posfija,
      * utilizando el método "infixToPosfix" dentro de esta misma clase.
      * @param infixTokens - lista de tokens a ser convertida.
-     * @return LinkedList<Token> - lista de tokens en la forma correcta para
+     * @return LinkedList - lista de tokens en la forma correcta para
      * poder ser convertida a notación posfija.
      */
     public static LinkedList<Token> unaryMinusConverter(LinkedList<Token> infixTokens){

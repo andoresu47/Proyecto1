@@ -22,6 +22,8 @@ public interface InputListener extends EventListener{
      *                   sea una función matemática válida, en notación infija.
      * @param xMin - cadena que representa el valor mínimo del rango en X.
      * @param xMax - cadena que representa el valor máximo del rango en X.
+     * @param yMin - cadena que representa el valor mínimo del rango en Y.
+     * @param yMax - cadena que representa el valor máximo del rango en Y.
      */
     public void inputEventOccurred(String expression, String xMin, String xMax, String yMin, String yMax);
 }

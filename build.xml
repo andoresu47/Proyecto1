@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Example" default="run" basedir="." >
+
+  <property name="build.dir" value="build" />
+  <property name="src.dir"   value="src" />
+  <property name="lib.dir"   value="lib" />
+  <property name="doc.dir"   value="doc" />
+  <property name="configs.dir"   value="configs" />
+
+  <target name="jar" depends="compile">
+    <jar jarfile="Graficador.jar">
+      <zipfileset dir="${build.dir}" prefix="" excludes="**/*test*/"  />
+      <manifest>
+        <attribute name="Main-Class" value="calculator.App"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="compile.Xlint">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}"
+      destdir="${build.dir}"
+      debug="true"
+      debuglevel="lines,vars,source"
+      includeantruntime="false"
+      deprecation="true"
+      nowarn="off">
+      <classpath>
+	<fileset dir="${lib.dir}">
+	  <include name="*.jar"/>
+	</fileset>
+      </classpath>
+    <compilerarg value="-Xlint"/> 
+    </javac>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}"
+      destdir="${build.dir}"
+      debug="true"
+      debuglevel="lines,vars,source"
+      includeantruntime="false"
+      deprecation="true"
+      nowarn="off">
+      <classpath>
+	<fileset dir="${lib.dir}">
+	  <include name="*.jar"/>
+	</fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="doc" depends="jar">
+    <mkdir dir="${doc.dir}"/>
+    <javadoc packagenames="calculator.*"
+             sourcepath="${src.dir}"
+             defaultexcludes="yes"
+             destdir="${doc.dir}"
+             author="false"
+             version="false"
+             use="true"
+             windowtitle="Documentacion">
+      <doctitle><![CDATA[<h1>Documentacion</h1>]]></doctitle>
+      <link href="http://docs.oracle.com/javase/7/docs/api/" />
+      <classpath>
+	<fileset dir="${lib.dir}">
+	  <include name="*.jar"/>
+	</fileset>
+      </classpath>
+    </javadoc>
+  </target>
+
+  <target name="clean">
+    <delete file="Graficador.jar"/>
+    <delete dir="${build.dir}"/>
+    <delete dir="${doc.dir}"/>
+    <delete dir="${configs.dir}"/>
+  </target>
+
+    <target name="run" depends="jar">
+        <java jar="Graficador.jar" fork="true"/>
+    </target>
+
+  <target name="test" depends="jar">
+    <junit printsummary="yes" haltonfailure="no">
+      <formatter type="plain" usefile="false" />
+      <classpath>
+	<pathelement path="${build.dir}" />
+	<fileset dir="${lib.dir}">
+	  <include name="*.jar"/>
+	</fileset>
+      </classpath>
+      <batchtest fork="yes">
+        <fileset dir="${src.dir}">
+          <include name="**/*Test*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+</project>

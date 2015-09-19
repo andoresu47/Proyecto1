@@ -20,7 +20,7 @@ public class EvaluateTest {
      * Método que prueba íntegramente el proceso de validación y
      * evaluación de una expresión, desde que es introducida en
      * su forma de cadena, hasta que se tiene el resultado final.
-     * @throws Exception
+     * @throws Exception si ocurre alguna anomalía.
      */
     @Test
     public void testWholeEvaluationProcess() throws Exception{

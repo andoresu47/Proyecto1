@@ -97,7 +97,7 @@ public class ExpressionTokenizer {
      * a partir de la expresión con la que se construyó
      * el objeto. Esta lista sólo incluirá elementos permitidos
      * por la gramática, descartando caracteres ajenos.
-     * @return LinkedList<Token> - lista de tokens permitidos
+     * @return LinkedList - lista de tokens permitidos
      * con la descomposición de una cadena. Null si la expresion
      * contiene algún valor que no sea uno de los tokens definidos.
      */

@@ -1,4 +1,6 @@
-package calculator.graphing.src;
+package calculator;
+
+import calculator.graphing.src.MainFrame;
 
 import javax.swing.*;
 

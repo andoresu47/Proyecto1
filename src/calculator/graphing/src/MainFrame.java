@@ -110,6 +110,7 @@ public class MainFrame extends JFrame {
             public void clearScreenEventOccurred() {
                 graphArea.setCoordinates(null);
                 graphArea.setCenter(new Coordinate(0,0));
+                postfixTokens = null;
             }
         });
 
@@ -123,7 +124,7 @@ public class MainFrame extends JFrame {
                 JFileChooser saveFile = new JFileChooser();
                 saveFile.setAcceptAllFileFilterUsed(false);
                 saveFile.setMultiSelectionEnabled(false);
-                saveFile.addChoosableFileFilter(new FileNameExtensionFilter("Imagenes (*.jpg, *.png, *.gif, *bmp)"
+                saveFile.addChoosableFileFilter(new FileNameExtensionFilter("Imagenes (*.jpg, *.png, *.gif, *.bmp)"
                         , "jpg", "png", "gif", "bmp"));
                 saveFile.setDialogTitle("Guardar como");
 
@@ -213,8 +214,7 @@ public class MainFrame extends JFrame {
         if(!parser.isValid()){
             throw new SyntaxException();
         }
-        LinkedList<Token> postfixTokens = Evaluate.infixToPostfix(infixTokens);
-        this.postfixTokens = postfixTokens;
+        this.postfixTokens = Evaluate.infixToPostfix(infixTokens);
         reDrawGraph();
     }
 
@@ -285,7 +285,7 @@ public class MainFrame extends JFrame {
         try
         {
             ImageIO.write(image, "png", file);
-            JOptionPane.showMessageDialog(this, "Se ha guardado exitosamente la imagen.", "Confirmacion", JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showMessageDialog(this, "Se ha guardado exitosamente la imagen.", "Confirmacion", JOptionPane.PLAIN_MESSAGE);
         }
         catch(Exception e)
         {

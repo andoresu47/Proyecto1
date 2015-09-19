@@ -85,7 +85,7 @@ public class FieldSet extends JPanel {
      * distintas opciones del campo de entradas.Como todop esto fue mucho código, se
      * relegó a su propio método.
      */
-    public void setMouseClicks(){
+    private void setMouseClicks(){
         inputField.addMouseListener(new MouseAdapter() {
             /**
              * Método que determina la acción a llevar acabo al hacer click
@@ -181,7 +181,7 @@ public class FieldSet extends JPanel {
      * pueden abarcar más de una columna de espacio. Este método debe su
      * existencia a la extensión de su contenido.
      */
-    public void layoutComponents(){
+    private void layoutComponents(){
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
 
